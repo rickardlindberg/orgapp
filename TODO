@@ -1,0 +1,8 @@
+- Import file
+    - Create bucket
+        - Extract to src?
+        - Use </> in tests?
+
+- withTemporaryDirectory
+    - Introduce "IO a" how?
+    - Extract to utils file?
