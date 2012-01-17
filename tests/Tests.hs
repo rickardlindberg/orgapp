@@ -1,5 +1,6 @@
 import Control.Exception.Base (bracket)
 import System.Directory
+import System.Exit
 import Test.HUnit
 
 createBucket :: FilePath -> IO ()
@@ -22,4 +23,7 @@ tests = test [ "can create bucket" ~: withTemporaryDirectory $ \path -> do
                  assertBool "default bucket does not exist" exists
              ]
 
-main = runTestTT tests
+main = runTestTT tests >>= exit
+    where
+        exit Counts { errors=0, failures=0 } = exitSuccess
+        exit _                               = exitFailure
