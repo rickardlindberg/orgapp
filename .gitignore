@@ -1,3 +1,4 @@
 *.hi
 *.o
-org-app
+/org-app
+/tests/Tests
