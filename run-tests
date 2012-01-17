@@ -1,2 +1,2 @@
 #!/bin/sh
-ghc --make Tests.hs && ./Tests
+ghc --make tests/Tests.hs && ./tests/Tests
