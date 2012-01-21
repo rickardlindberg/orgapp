@@ -1,6 +1,4 @@
-module BucketLoaderTests
-    ( bucketLoadingTests
-    ) where
+module BucketLoaderTests (tests) where
 
 import Test.HUnit
 import Bucket (createBucket, loadBucketFrom)
@@ -16,7 +14,7 @@ givenFilesInBucketAt path = do
 whenLoadingBucketFrom = loadBucketFrom
 thenOneFileShouldBeReturned filesInBucket = assertEqual "" (Set.fromList ["oneFile", "anotherFile"]) (Set.fromList filesInBucket)
 
-bucketLoadingTests = test [
+tests = test [
 
     "return empty file list when no bucket exist" ~: do
         filesInBucket <- loadBucketFrom "/a/path"
