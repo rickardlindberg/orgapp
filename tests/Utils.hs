@@ -3,15 +3,11 @@ module Utils
     ) where
 
 import Control.Exception.Base (bracket)
-import System.Directory
+import System.Directory (createDirectory, removeDirectoryRecursive)
 
 withTemporaryDirectory :: (FilePath -> IO ()) -> IO ()
 withTemporaryDirectory = bracket setUp tearDown
     where
-        setUp :: IO FilePath
-        setUp = do
-            createDirectory "/tmp/org-app"
-            return "/tmp/org-app"
-        tearDown :: FilePath -> IO ()
-        tearDown path = do
-            removeDirectoryRecursive path
+        tmpDir   = "/tmp/org-app"
+        setUp    = createDirectory tmpDir >> return tmpDir
+        tearDown = removeDirectoryRecursive
