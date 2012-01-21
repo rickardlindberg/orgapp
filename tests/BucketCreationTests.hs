@@ -1,13 +1,18 @@
 module BucketCreationTests (tests) where
 
-import Test.HUnit
 import Bucket (createBucket)
-import Utils (withTemporaryDirectory)
 import System.Directory
+import System.FilePath
+import Test.HUnit
+import Utils (withTemporaryDirectory)
 
-tests = test [
-    "can create bucket" ~: withTemporaryDirectory $ \path -> do
-        createBucket (path ++ "/a-bucket")
-        exists <- (doesDirectoryExist (path ++ "/a-bucket"))
-        assertBool "default bucket does not exist" exists
+tests = test
+    [ "can create bucket" ~: withTemporaryDirectory $ \tmpDir -> do
+        let bucketPath = tmpDir </> "a-bucket"
+        createBucket bucketPath
+        assertDirectoryExists bucketPath
     ]
+
+assertDirectoryExists dir = do
+    exists <- doesDirectoryExist dir
+    assertBool "directory does not exist" exists
