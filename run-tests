@@ -1,2 +1,2 @@
 #!/bin/sh
-ghc --make tests/Tests.hs && ./tests/Tests
+ghc -isrc:tests --make tests/Tests.hs && ./tests/Tests

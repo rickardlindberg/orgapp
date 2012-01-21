@@ -3,6 +3,12 @@
         - Extract to src?
         - Use </> in tests?
 
+- Load bucket
+    - Create bucket creator (move createBucket there)
+
 - withTemporaryDirectory
     - Introduce "IO a" how?
     - Extract to utils file?
+
+- Add clean target to remove *.hi, ...
+- Automatically find tests in modules
