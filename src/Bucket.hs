@@ -1,6 +1,6 @@
-module BucketLoader
-    ( loadBucketFrom
-    , createBucket
+module Bucket
+    ( createBucket
+    , loadBucketFrom
     ) where
 
 import System.Directory

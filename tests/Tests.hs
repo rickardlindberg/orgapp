@@ -3,7 +3,7 @@ import Test.HUnit
 import Utils (withTemporaryDirectory)
 import BucketLoaderTests (bucketLoadingTests)
 import System.Directory
-import BucketLoader (createBucket)
+import Bucket (createBucket)
 
 tests = test [
     "can create bucket" ~: withTemporaryDirectory $ \path -> do

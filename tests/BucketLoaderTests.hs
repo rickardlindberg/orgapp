@@ -3,9 +3,8 @@ module BucketLoaderTests
     ) where
 
 import Test.HUnit
-import BucketLoader (loadBucketFrom)
+import Bucket (createBucket, loadBucketFrom)
 import Utils (withTemporaryDirectory)
-import BucketLoader (createBucket)
 import System.Directory
 import qualified Data.Set as Set
 
