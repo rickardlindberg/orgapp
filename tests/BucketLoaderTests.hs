@@ -7,6 +7,7 @@ import BucketLoader (loadBucketFrom)
 import Utils (withTemporaryDirectory)
 import BucketLoader (createBucket)
 import System.Directory
+import qualified Data.Set as Set
 
 givenABucketAt = createBucket
 givenFilesInBucketAt path = do
@@ -14,7 +15,7 @@ givenFilesInBucketAt path = do
     createDirectory $ path ++ "/anotherFile"
 
 whenLoadingBucketFrom = loadBucketFrom
-thenOneFileShouldBeReturned filesInBucket = assertEqual "" ["oneFile", "anotherFile"] filesInBucket
+thenOneFileShouldBeReturned filesInBucket = assertEqual "" (Set.fromList ["oneFile", "anotherFile"]) (Set.fromList filesInBucket)
 
 bucketLoadingTests = test [
 
