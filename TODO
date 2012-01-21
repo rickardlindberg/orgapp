@@ -2,5 +2,4 @@
     - Introduce "IO a" how?
 
 - Infrastructure
-    - Add clean target to remove *.hi, ...
     - Automatically find tests in modules

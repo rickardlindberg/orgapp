@@ -1,0 +1,5 @@
+#!/bin/sh
+find . -name '*.hi' -exec rm '{}' ';'
+find . -name '*.o' -exec rm '{}' ';'
+rm -f src/Main
+rm -f tests/Tests
