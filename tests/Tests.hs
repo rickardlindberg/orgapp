@@ -1,11 +1,11 @@
 import qualified BucketCreationTests as BC
-import qualified BucketLoaderTests as BT
+import qualified BucketLoadingTests as BL
 import System.Exit
 import Test.HUnit
 
 allTests = test
     [ BC.tests
-    , BT.tests
+    , BL.tests
     ]
 
 main = runTestTT allTests >>= exit
