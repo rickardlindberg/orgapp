@@ -1,5 +1,8 @@
 - withTemporaryDirectory
     - Introduce "IO a" how?
+    - Can withBucket use it somehow?
+
+- Is there a monadic not? (assertFileDoesNotExist)
 
 - Infrastructure
     - Automatically find tests in modules
