@@ -1,11 +1,12 @@
 module BucketLoadingTests (tests) where
 
 import Bucket (createBucket, loadBucketFrom)
+import Fixtures
 import qualified Data.Set as Set
 import System.Directory
 import System.FilePath
 import Test.HUnit
-import Utils (withTemporaryDirectory)
+import Utils
 
 tests = test
     [ "return empty file list when no bucket exist" ~: do

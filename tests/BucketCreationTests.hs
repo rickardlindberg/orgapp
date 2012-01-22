@@ -1,6 +1,7 @@
 module BucketCreationTests (tests) where
 
 import Bucket (createBucket, importFile)
+import Fixtures
 import System.FilePath
 import Test.HUnit
 import Utils
