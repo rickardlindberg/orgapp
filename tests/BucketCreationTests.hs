@@ -1,18 +1,17 @@
 module BucketCreationTests (tests) where
 
-import Bucket (createBucket)
-import System.Directory
+import Bucket (createBucket, importFile)
 import System.FilePath
 import Test.HUnit
-import Utils (withTemporaryDirectory)
+import Utils
 
 tests = test
-    [ "can create bucket" ~: withTemporaryDirectory $ \tmpDir -> do
-        let bucketPath = tmpDir </> "a-bucket"
-        createBucket bucketPath
+    [ "has directory for new bucket" ~: withBucket $ \((tmpDir, bucketPath)) -> do
         assertDirectoryExists bucketPath
-    ]
 
-assertDirectoryExists dir = do
-    exists <- doesDirectoryExist dir
-    assertBool "directory does not exist" exists
+    , "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucketPath)) -> do
+        let aSourceFile = tmpDir </> "a-file.png"
+        createEmptyFile aSourceFile
+        importFile bucketPath aSourceFile
+        aSourceFile `assertMovedTo` (bucketPath </> "a-file" </> "a-file.png")
+    ]

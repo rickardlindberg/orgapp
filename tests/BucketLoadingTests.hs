@@ -10,22 +10,28 @@ import Utils (withTemporaryDirectory)
 tests = test
     [ "return empty file list when no bucket exist" ~: do
         filesInBucket <- loadBucketFrom "/a/path"
-        assertEqual "Should be empty" [] filesInBucket
+        filesInBucket `shouldBeSameAs` []
+
+    , "return empty file list when bucket is empty" ~: withTemporaryDirectory $ \tmpDir -> do
+        let bucketPath = tmpDir </> "bucket"
+        givenABucketAt bucketPath
+        filesInBucket <- whenLoadingBucketFrom bucketPath
+        filesInBucket `shouldBeSameAs` []
 
     , "return files in bucket" ~: withTemporaryDirectory $ \tmpDir -> do
         let bucketPath = tmpDir </> "bucket"
         givenABucketAt bucketPath
-        givenFilesInBucketAt bucketPath
+        givenFilesInBucketAt bucketPath ["oneFile", "anotherFile"]
         filesInBucket <- whenLoadingBucketFrom bucketPath
-        thenOneFileShouldBeReturned filesInBucket
+        filesInBucket `shouldBeSameAs` ["oneFile", "anotherFile"]
     ]
 
 givenABucketAt = createBucket
 
-givenFilesInBucketAt path = do
-    createDirectory $ path </> "oneFile"
-    createDirectory $ path </> "anotherFile"
+givenFilesInBucketAt path fileNames = do
+    mapM (\fileName -> createDirectory $ path </> fileName) fileNames
 
 whenLoadingBucketFrom = loadBucketFrom
 
-thenOneFileShouldBeReturned filesInBucket = assertEqual "" (Set.fromList ["oneFile", "anotherFile"]) (Set.fromList filesInBucket)
+shouldBeSameAs filesInBucket expectedFiles =
+    assertEqual "contents differed" (Set.fromList expectedFiles) (Set.fromList filesInBucket)
