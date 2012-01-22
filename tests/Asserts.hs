@@ -1,4 +1,4 @@
-module Utils where
+module Asserts where
 
 import System.Directory
 import Test.HUnit

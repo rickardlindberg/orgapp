@@ -1,10 +1,10 @@
 module BucketCreationTests (tests) where
 
+import Asserts
 import Bucket (createBucket, importFile)
 import Fixtures
 import System.FilePath
 import Test.HUnit
-import Utils
 
 tests = test
     [ "has directory for new bucket" ~: withBucket $ \((tmpDir, bucketPath)) -> do
