@@ -3,7 +3,6 @@ module BucketLoadingTests (tests) where
 import Asserts
 import Bucket (createBucket, loadBucketFrom)
 import Fixtures
-import qualified Data.Set as Set
 import System.Directory
 import System.FilePath
 import Test.HUnit
@@ -33,6 +32,3 @@ givenFilesInBucketAt path fileNames = do
     mapM (\fileName -> createDirectory $ path </> fileName) fileNames
 
 whenLoadingBucketFrom = loadBucketFrom
-
-shouldBeSameAs filesInBucket expectedFiles =
-    assertEqual "contents differed" (Set.fromList expectedFiles) (Set.fromList filesInBucket)
