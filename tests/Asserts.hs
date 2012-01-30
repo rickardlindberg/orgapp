@@ -8,9 +8,9 @@ assertMovedTo src dest = do
     assertFileExists dest
     assertFileDoesNotExist src
 
-assertFileDoesNotExist file = doesFileExist file >>= \exists -> assertBool "file does exist" (not exists)
+assertFileDoesNotExist file = doesFileExist file >>= \exists -> assertBool ("file '" ++file ++ "' does exist") (not exists)
 
-assertFileExists file = doesFileExist file >>= assertBool "file does not exist"
+assertFileExists file = doesFileExist file >>= assertBool ("file '" ++ file ++ "' does not exist")
 
 assertDirectoryExists dir = do
     exists <- doesDirectoryExist dir

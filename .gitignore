@@ -2,3 +2,4 @@
 *.o
 /src/Main
 /tests/Tests
+/tests/QCTests
