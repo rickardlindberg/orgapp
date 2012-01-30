@@ -2,30 +2,39 @@ module TestLoadBucket (tests) where
 
 import Asserts
 import Bucket
+import Data.Maybe
 import Fixtures
 import System.Directory
 import System.FilePath
 import Test.HUnit
 
 tests = test
-    [ "return empty file list when no bucket exist" ~: do
-        bucket <- loadBucketFrom "/a/path"
-        bucketPath bucket @?= "/a/path"
-        bucket `assertHasItems` []
+    [ "loading non-existent bucket returns nothing" ~: do
+        bucket <- loadBucketFrom "/a/non/existing/path"
+        assertBool "" (isNothing bucket)
 
-    , "return empty file list when bucket is empty" ~: withTemporaryDirectory $ \tmpDir -> do
-        let bucketPath = tmpDir </> "bucket"
-        createBucket bucketPath
-        bucket <- loadBucketFrom bucketPath
-        bucket `assertHasItems` []
+    , "loading empty bucket" ~:
 
-    , "return files in bucket" ~: withTemporaryDirectory $ \tmpDir -> do
-        let bucketPath = tmpDir </> "bucket"
-        bucket <- createBucket bucketPath
-        givenFilesInBucketAt bucketPath ["oneFile", "anotherFile"]
-        bucket <- loadBucketFrom bucketPath
-        bucket `assertHasItems` ["oneFile", "anotherFile"]
+        [ "returns bucket with path" ~: withBucket $ \((tmpDir, bucket)) -> do
+            Just loadedBucket <- loadBucketFrom $ bucketPath bucket
+            (bucketPath loadedBucket) @?= (bucketPath bucket)
+
+        , "returns bucket with no items" ~: withBucket $ \((tmpDir, bucket)) -> do
+            Just loadedBucket <- loadBucketFrom $ bucketPath bucket
+            loadedBucket `assertHasItems` []
+        ]
+
+    , "loading non-empty bucket" ~:
+
+        [ "loads all items" ~: withBucket $ \((tmpDir, bucket)) -> do
+            createItemAt (bucketPath bucket </> "one-item")     "item1.png"
+            createItemAt (bucketPath bucket </> "another-item") "item2.png"
+            Just loadedBucket <- loadBucketFrom (bucketPath bucket)
+            loadedBucket `assertHasItems` ["one-item", "another-item"]
+
+        , "skips files which are not items" ~: withBucket $ \((tmpDir, bucket)) -> do
+            createEmptyFile (bucketPath bucket </> "not-an-item.png")
+            Just loadedBucket <- loadBucketFrom (bucketPath bucket)
+            loadedBucket `assertHasItems` []
+        ]
     ]
-
-givenFilesInBucketAt path fileNames = do
-    mapM (\fileName -> createDirectory $ path </> fileName) fileNames

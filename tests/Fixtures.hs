@@ -28,3 +28,6 @@ createEmptyFile :: FilePath -> IO FilePath
 createEmptyFile path =
     (createDirectoryIfMissing True (takeDirectory path)) >>
     openFile path WriteMode >>= hClose >> return path
+
+createItemAt :: FilePath -> FilePath -> IO FilePath
+createItemAt path name = createDirectory path >> createEmptyFile (path </> name)

@@ -8,6 +8,7 @@ module Bucket
     ) where
 
 import Data.List
+import FileInfo
 import System.Directory
 import System.FilePath
 
@@ -25,18 +26,20 @@ createBucket path = do
     createDirectory path
     return $ Bucket path []
 
-loadBucketFrom :: FilePath -> IO Bucket
-loadBucketFrom pathToBucket = do
-    exists <- doesDirectoryExist pathToBucket
-    case exists of
-        True -> do
-            files <- getDirectoryContents pathToBucket
-            return $ Bucket pathToBucket (map BucketItem (filter isBucketFile files))
-        False -> return $ Bucket pathToBucket []
+loadBucketFrom :: FilePath -> IO (Maybe Bucket)
+loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketIfExists
+    where
+        loadBucketIfExists False = return Nothing
+        loadBucketIfExists True  = do
+            fileInfos <- getFileInfos pathToBucket
+            return $ Just $ Bucket pathToBucket (fileInfosToItems fileInfos)
+        fileInfosToItems x = map fileInfoToItem (filter isBucketItem x)
+        fileInfoToItem (FileInfo path _) = BucketItem path
 
-isBucketFile "." = False
-isBucketFile ".." = False
-isBucketFile _ = True
+isBucketItem :: FileInfo -> Bool
+isBucketItem (FileInfo "."  _    ) = False
+isBucketItem (FileInfo ".." _    ) = False
+isBucketItem (FileInfo _    isDir) = isDir
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
