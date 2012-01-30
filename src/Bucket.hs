@@ -27,19 +27,27 @@ createBucket path = do
     return $ Bucket path []
 
 loadBucketFrom :: FilePath -> IO (Maybe Bucket)
-loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketIfExists
+loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketWhenExists
     where
-        loadBucketIfExists False = return Nothing
-        loadBucketIfExists True  = do
+        loadBucketWhenExists False = return Nothing
+        loadBucketWhenExists True  = do
             fileInfos <- getFileInfos pathToBucket
-            return $ Just $ Bucket pathToBucket (fileInfosToItems fileInfos)
-        fileInfosToItems x = map fileInfoToItem (filter isBucketItem x)
-        fileInfoToItem (FileInfo path _) = BucketItem path
+            return    $  Just $ fileInfosToBucket pathToBucket fileInfos
+
+fileInfosToBucket :: FilePath -> [FileInfo] -> Bucket
+fileInfosToBucket pathToBucket fileInfos = Bucket pathToBucket items
+    where
+        items = fileInfosToItems fileInfos
+        fileInfosToItems fileInfo = map fileInfoToItem $ filter isBucketItem fileInfo
+        fileInfoToItem (FileInfo { relativePath = path }) = BucketItem path
 
 isBucketItem :: FileInfo -> Bool
-isBucketItem (FileInfo "."  _    ) = False
-isBucketItem (FileInfo ".." _    ) = False
-isBucketItem (FileInfo _    isDir) = isDir
+isBucketItem fileInfo
+    | hasMetaFile fileInfo = True
+    | otherwise            = False
+
+hasMetaFile :: FileInfo -> Bool
+hasMetaFile FileInfo { subFiles = subFiles } = "meta.txt" `elem` subFiles
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do

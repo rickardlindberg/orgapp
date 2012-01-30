@@ -30,4 +30,6 @@ createEmptyFile path =
     openFile path WriteMode >>= hClose >> return path
 
 createItemAt :: FilePath -> FilePath -> IO FilePath
-createItemAt path name = createDirectory path >> createEmptyFile (path </> name)
+createItemAt path name = do
+    createEmptyFile (path </> name)
+    createEmptyFile (path </> "meta.txt")

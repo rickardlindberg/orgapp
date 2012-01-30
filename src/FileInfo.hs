@@ -8,13 +8,18 @@ import System.FilePath
 
 data FileInfo = FileInfo {
     relativePath :: FilePath,
-    isDirectory  :: Bool
+    subFiles     :: [FilePath]
 }
 
 getFileInfos :: FilePath -> IO [FileInfo]
-getFileInfos rootDir = do
-    files         <- getDirectoryContents rootDir
-    isDirectories <- mapM isNameDirectory files
-    return        $  zipWith FileInfo files isDirectories
-    where
-        isNameDirectory name = doesDirectoryExist $ rootDir </> name
+getFileInfos rootDir = getFileInfosNew rootDir ""
+
+getFileInfosNew :: FilePath -> FilePath -> IO [FileInfo]
+getFileInfosNew rootPath relative = do
+    isDirectory <- doesDirectoryExist $ rootPath </> relative
+    case isDirectory of
+        False -> return $ [FileInfo relative []]
+        True  -> do
+            files <- getDirectoryContents $ rootPath </> relative
+            inner <- mapM (\x -> getFileInfosNew rootPath (relative </> x)) (filter (`notElem` [".", ".."]) files)
+            return $ (FileInfo relative files):(concat inner)

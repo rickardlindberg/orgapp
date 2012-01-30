@@ -32,6 +32,11 @@ tests = test
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
             loadedBucket `assertHasItems` ["one-item", "another-item"]
 
+        , "loads items in subdirectories" ~: withBucket $ \((tmpDir, bucket)) -> do
+            createItemAt (bucketPath bucket </> "subdir" </> "one-item") "item1.png"
+            Just loadedBucket <- loadBucketFrom (bucketPath bucket)
+            loadedBucket `assertHasItems` ["subdir" </> "one-item"]
+
         , "skips files which are not items" ~: withBucket $ \((tmpDir, bucket)) -> do
             createEmptyFile (bucketPath bucket </> "not-an-item.png")
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
