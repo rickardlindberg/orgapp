@@ -18,10 +18,12 @@ data Bucket = Bucket {
 
 data BucketItem = BucketItem {
     itemPath :: FilePath
-} deriving (Show)
+} deriving (Eq, Show)
 
-createBucket :: FilePath -> IO ()
-createBucket = createDirectory
+createBucket :: FilePath -> IO Bucket
+createBucket path = do
+    createDirectory path
+    return $ Bucket path []
 
 loadBucketFrom :: FilePath -> IO Bucket
 loadBucketFrom pathToBucket = do

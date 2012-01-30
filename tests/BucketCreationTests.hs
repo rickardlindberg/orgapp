@@ -10,6 +10,9 @@ tests = test
     [ "has directory for new bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         assertDirectoryExists (bucketPath bucket)
 
+    , "has no items to begin with" ~: withBucket $ \((tmpDir, bucket)) -> do
+        (bucketItems bucket) @?= []
+
     , "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         importFile bucket aSourceFile

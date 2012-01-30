@@ -20,8 +20,8 @@ withBucket = bracket setUp tearDown
         bucketPath = tmpDir </> "a-bucket"
         setUp      = do
             createDirectory tmpDir
-            createBucket bucketPath
-            return (tmpDir, Bucket bucketPath [])
+            bucket <- createBucket bucketPath
+            return (tmpDir, bucket)
         tearDown (tmpDir, _) = removeDirectoryRecursive tmpDir
 
 createEmptyFile :: FilePath -> IO FilePath
