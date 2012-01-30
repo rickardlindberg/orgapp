@@ -7,13 +7,13 @@ import System.FilePath
 import Test.HUnit
 
 tests = test
-    [ "has directory for new bucket" ~: withBucket $ \((tmpDir, bucketPath)) -> do
-        assertDirectoryExists bucketPath
+    [ "has directory for new bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
+        assertDirectoryExists (bucketPath bucket)
 
-    , "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucketPath)) -> do
+    , "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
-        importFile bucketPath aSourceFile
-        aSourceFile `assertMovedTo` (bucketPath </> "a-file-1" </> "a-file.png")
+        importFile (bucketPath bucket) aSourceFile
+        aSourceFile `assertMovedTo` (bucketPath bucket </> "a-file-1" </> "a-file.png")
 
     , "an item has a unique name" ~:
 
