@@ -1,4 +1,4 @@
-module BucketImportingTests (tests) where
+module TestImportFile (tests) where
 
 import Asserts
 import Bucket
@@ -12,7 +12,7 @@ tests = test
         importFile bucket aSourceFile
         aSourceFile `assertMovedTo` (bucketPath bucket </> "a-file-1" </> "a-file.png")
 
-    , "roundtrip" ~: withBucket $ \((tmpDir, bucket)) -> do
+    , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         file1 <- createEmptyFile $ tmpDir </> "file1.png"
         file2 <- createEmptyFile $ tmpDir </> "file2.png"
         bucket <- importFile bucket file1

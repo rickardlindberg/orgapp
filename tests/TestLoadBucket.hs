@@ -1,4 +1,4 @@
-module BucketLoadingTests (tests) where
+module TestLoadBucket (tests) where
 
 import Asserts
 import Bucket
