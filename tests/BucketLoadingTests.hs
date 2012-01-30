@@ -1,7 +1,7 @@
 module BucketLoadingTests (tests) where
 
 import Asserts
-import Bucket (createBucket, loadBucketFrom)
+import Bucket
 import Fixtures
 import System.Directory
 import System.FilePath
@@ -9,21 +9,21 @@ import Test.HUnit
 
 tests = test
     [ "return empty file list when no bucket exist" ~: do
-        filesInBucket <- loadBucketFrom "/a/path"
-        filesInBucket `shouldBeSameAs` []
+        bucket <- loadBucketFrom "/a/path"
+        (map itemPath (bucketItems bucket)) `shouldBeSameAs` []
 
     , "return empty file list when bucket is empty" ~: withTemporaryDirectory $ \tmpDir -> do
         let bucketPath = tmpDir </> "bucket"
         givenABucketAt bucketPath
-        filesInBucket <- whenLoadingBucketFrom bucketPath
-        filesInBucket `shouldBeSameAs` []
+        bucket <- whenLoadingBucketFrom bucketPath
+        (map itemPath (bucketItems bucket)) `shouldBeSameAs` []
 
     , "return files in bucket" ~: withTemporaryDirectory $ \tmpDir -> do
         let bucketPath = tmpDir </> "bucket"
         givenABucketAt bucketPath
         givenFilesInBucketAt bucketPath ["oneFile", "anotherFile"]
-        filesInBucket <- whenLoadingBucketFrom bucketPath
-        filesInBucket `shouldBeSameAs` ["oneFile", "anotherFile"]
+        bucket <- whenLoadingBucketFrom bucketPath
+        (map itemPath (bucketItems bucket)) `shouldBeSameAs` ["oneFile", "anotherFile"]
     ]
 
 givenABucketAt = createBucket
