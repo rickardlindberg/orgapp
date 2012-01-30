@@ -36,11 +36,11 @@ isBucketFile "." = False
 isBucketFile ".." = False
 isBucketFile _ = True
 
-importFile :: FilePath -> FilePath -> IO ()
-importFile bucketPath filePath = do
-    existingItems <- loadBucketFrom bucketPath
+importFile :: Bucket -> FilePath -> IO ()
+importFile bucket filePath = do
+    existingItems <- loadBucketFrom $ bucketPath bucket
     let sourceFileName = takeFileName filePath
-    let itemDirectory = bucketPath </> (createItemName (bucketItems existingItems) filePath)
+    let itemDirectory = bucketPath bucket </> (createItemName (bucketItems existingItems) filePath)
     createDirectory itemDirectory
     renameFile filePath (itemDirectory </> sourceFileName)
 

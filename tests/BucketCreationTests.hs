@@ -12,7 +12,7 @@ tests = test
 
     , "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
-        importFile (bucketPath bucket) aSourceFile
+        importFile bucket aSourceFile
         aSourceFile `assertMovedTo` (bucketPath bucket </> "a-file-1" </> "a-file.png")
 
     , "an item has a unique name" ~:
