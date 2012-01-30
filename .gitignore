@@ -1,5 +1,5 @@
 *.hi
 *.o
 /src/Main
-/tests/Tests
+/tests/UnitTests
 /tests/QCTests

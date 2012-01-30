@@ -2,5 +2,5 @@
 find . -name '*.hi' -exec rm '{}' ';'
 find . -name '*.o' -exec rm '{}' ';'
 rm -f src/Main
-rm -f tests/Tests
+rm -f tests/UnitTests
 rm -f tests/QCTests
