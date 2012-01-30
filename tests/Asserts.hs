@@ -1,5 +1,6 @@
 module Asserts where
 
+import Bucket
 import qualified Data.Set as Set
 import System.Directory
 import Test.HUnit
@@ -15,6 +16,9 @@ assertFileExists file = doesFileExist file >>= assertBool ("file '" ++ file ++ "
 assertDirectoryExists dir = do
     exists <- doesDirectoryExist dir
     assertBool "directory does not exist" exists
+
+assertHasItems :: Bucket -> [String] -> Assertion
+assertHasItems bucket itemNames = (map itemPath (bucketItems bucket)) `shouldBeSameAs` itemNames
 
 shouldBeSameAs :: [String] -> [String] -> Assertion
 shouldBeSameAs filesInBucket expectedFiles =

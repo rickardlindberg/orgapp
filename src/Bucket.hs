@@ -38,13 +38,19 @@ isBucketFile "." = False
 isBucketFile ".." = False
 isBucketFile _ = True
 
-importFile :: Bucket -> FilePath -> IO ()
-importFile bucket filePath = do
-    existingItems <- loadBucketFrom $ bucketPath bucket
-    let sourceFileName = takeFileName filePath
-    let itemDirectory = bucketPath bucket </> (createItemName (bucketItems existingItems) filePath)
+importFile :: Bucket -> FilePath -> IO Bucket
+importFile bucket srcPath = do
     createDirectory itemDirectory
-    renameFile filePath (itemDirectory </> sourceFileName)
+    renameFile srcPath itemPath
+    return $ extendBucketWith itemName
+    where
+        itemDirectory             = bucketPath bucket </> itemName
+        itemName                  = createItemName (bucketItems bucket) srcPath
+        itemPath                  = itemDirectory </> srcFileName
+        srcFileName               = takeFileName srcPath
+        extendBucketWith itemName = bucket {
+            bucketItems = (BucketItem itemName):(bucketItems bucket)
+        }
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
