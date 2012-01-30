@@ -24,6 +24,7 @@ withBucket = bracket setUp tearDown
             return (tmpDir, bucketPath)
         tearDown (tmpDir, bucketPath) = removeDirectoryRecursive tmpDir
 
+createEmptyFile :: FilePath -> IO FilePath
 createEmptyFile path =
     (createDirectoryIfMissing True (takeDirectory path)) >>
-    openFile path WriteMode >>= hClose
+    openFile path WriteMode >>= hClose >> return path
