@@ -1,3 +1,6 @@
 #!/bin/sh
-ghc -isrc:tests --make tests/QCTests.hs && ./tests/QCTests
-ghc -isrc:tests --make tests/UnitTests.hs && ./tests/UnitTests
+./compile-app &&
+ghc -isrc:tests --make tests/QCTests.hs &&
+ghc -isrc:tests --make tests/UnitTests.hs &&
+./tests/QCTests &&
+./tests/UnitTests
