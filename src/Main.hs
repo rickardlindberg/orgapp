@@ -2,27 +2,36 @@ import Bucket
 import Graphics.UI.Gtk
 import ItemsTreeModel
 
+main :: IO ()
 main = do
     initGUI
+    itemsTreeModel <- itemsTreeModelNew
+    showMainWindow itemsTreeModel
+    mainGUI
 
-    builder <- builderNew
-    builderAddFromFile builder "interface.glade"
+showMainWindow :: ItemsTreeModel -> IO ()
+showMainWindow itemsTreeModel = do
+    builder       <- builderFromFile "interface.glade"
 
     mainWindow    <- builderGetObject builder castToWindow   "main_window"
     importButton  <- builderGetObject builder castToButton   "import_button"
     searchText    <- builderGetObject builder castToEntry    "search_text"
     itemsTreeView <- builderGetObject builder castToTreeView "items_tree_view"
 
-    model <- itemsTreeModelNew
-    initItemsTreeView itemsTreeView model
-
     mainWindow    `onDestroy`         mainQuit
     importButton  `onClicked`         handleImportButtonClicked
     searchText    `onEditableChanged` handleSearchTextChanged searchText
-    itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView model
+    itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsTreeModel
+
+    initItemsTreeView itemsTreeView itemsTreeModel
 
     widgetShowAll mainWindow
-    mainGUI
+
+builderFromFile :: FilePath -> IO Builder
+builderFromFile path = do
+    builder <- builderNew
+    builderAddFromFile builder path
+    return builder
 
 initItemsTreeView :: TreeView -> ItemsTreeModel -> IO ()
 initItemsTreeView treeView model = do
