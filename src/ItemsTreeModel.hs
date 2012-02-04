@@ -1,6 +1,7 @@
 module ItemsTreeModel
     ( ItemsTreeModel
     , itemsTreeModelNew
+    , updateModel
     , getItem
     ) where
 
@@ -11,6 +12,12 @@ type ItemsTreeModel = ListStore BucketItem
 
 itemsTreeModelNew :: IO ItemsTreeModel
 itemsTreeModelNew = listStoreNew []
+
+updateModel :: ItemsTreeModel -> Bucket -> IO ()
+updateModel model bucket = do
+    listStoreClear model
+    mapM (listStoreAppend model) (bucketItems bucket)
+    return ()
 
 getItem :: TreeView -> ItemsTreeModel -> TreePath -> IO BucketItem
 getItem treeView model treePath = do
