@@ -1,8 +1,6 @@
 import Bucket
 import Graphics.UI.Gtk
-import Graphics.UI.Gtk.Builder
-import Graphics.UI.Gtk.ModelView.ListStore
-import Graphics.UI.Gtk.ModelView.TreeViewColumn
+import ItemsTreeModel
 
 main = do
     initGUI
@@ -15,7 +13,7 @@ main = do
     searchText    <- builderGetObject builder castToEntry    "search_text"
     itemsTreeView <- builderGetObject builder castToTreeView "items_tree_view"
 
-    model <- listStoreNew ([BucketItem "a/path"] :: [BucketItem])
+    model <- itemsTreeModelNew
     initItemsTreeView itemsTreeView model
 
     mainWindow    `onDestroy`         mainQuit
@@ -26,13 +24,13 @@ main = do
     widgetShowAll mainWindow
     mainGUI
 
-initItemsTreeView :: TreeView -> ListStore BucketItem -> IO ()
+initItemsTreeView :: TreeView -> ItemsTreeModel -> IO ()
 initItemsTreeView treeView model = do
     treeViewSetModel treeView model
     createNameColumn model >>= treeViewAppendColumn treeView
     return ()
 
-createNameColumn :: ListStore BucketItem -> IO TreeViewColumn
+createNameColumn :: ItemsTreeModel -> IO TreeViewColumn
 createNameColumn model = do
     textRenderer <- cellRendererTextNew
     column       <- treeViewColumnNew
@@ -51,8 +49,3 @@ handleSearchTextChanged searchText = do
 handleItemActivated treeView model treePath treeViewColumn = do
     item <- getItem treeView model treePath
     putStrLn $ "activated item: " ++ (itemPath item)
-
-getItem :: TreeView -> ListStore BucketItem -> TreePath -> IO BucketItem
-getItem treeView model treePath = do
-    Just treeIter <- treeModelGetIter model treePath
-    listStoreGetValue model (listStoreIterToIndex treeIter)
