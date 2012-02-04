@@ -1,2 +1,2 @@
 #!/bin/sh
-ghc --make src/Main.hs
+ghc -isrc --make src/Main.hs
