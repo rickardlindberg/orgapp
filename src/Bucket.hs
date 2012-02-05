@@ -11,6 +11,7 @@ import Data.List
 import FileInfo
 import System.Directory
 import System.FilePath
+import System.IO
 
 data Bucket = Bucket {
     bucketPath  :: FilePath,
@@ -52,6 +53,7 @@ hasMetaFile FileInfo { subFiles = subFiles } = "meta.txt" `elem` subFiles
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
     createDirectory itemDirectory
+    createMetaFile srcPath itemDirectory
     renameFile srcPath itemPath
     return $ extendBucketWith itemName
     where
@@ -62,6 +64,10 @@ importFile bucket srcPath = do
         extendBucketWith itemName = bucket {
             bucketItems = (BucketItem itemName):(bucketItems bucket)
         }
+
+createMetaFile :: FilePath -> FilePath -> IO ()
+createMetaFile srcPath itemDirectory = do
+    openFile (itemDirectory </> "meta.txt") WriteMode >>= hClose
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName

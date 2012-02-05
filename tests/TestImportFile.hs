@@ -12,6 +12,11 @@ tests = test
         importFile bucket aSourceFile
         aSourceFile `assertMovedTo` (bucketPath bucket </> "a-file-1" </> "a-file.png")
 
+    , "importing a file creates a meta.txt file" ~: withBucket $ \((tmpDir, bucket)) -> do
+        aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
+        importFile bucket aSourceFile
+        assertFileExists (bucketPath bucket </> "a-file-1" </> "meta.txt")
+
     , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         file1 <- createEmptyFile $ tmpDir </> "file1.png"
         file2 <- createEmptyFile $ tmpDir </> "file2.png"
