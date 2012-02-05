@@ -8,7 +8,7 @@ module Bucket
     ) where
 
 import Data.List
-import FileInfo
+import DirectoryInfo
 import System.Directory
 import System.FilePath
 import System.IO
@@ -32,23 +32,23 @@ loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketWhen
     where
         loadBucketWhenExists False = return Nothing
         loadBucketWhenExists True  = do
-            fileInfos <- getFileInfos pathToBucket
-            return    $  Just $ fileInfosToBucket pathToBucket fileInfos
+            directories <- getDirectoryInfoRecursive pathToBucket
+            return $ Just $ directoriesToBucket pathToBucket directories
 
-fileInfosToBucket :: FilePath -> [FileInfo] -> Bucket
-fileInfosToBucket pathToBucket fileInfos = Bucket pathToBucket items
+directoriesToBucket :: FilePath -> [DirectoryInfo] -> Bucket
+directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
-        items = fileInfosToItems fileInfos
-        fileInfosToItems fileInfo = map fileInfoToItem $ filter isBucketItem fileInfo
-        fileInfoToItem (FileInfo { relativePath = path }) = BucketItem path
+        items = directoriesToItems directories
+        directoriesToItems directoryInfo = map directoryToItem $ filter isBucketItem directoryInfo
+        directoryToItem (DirectoryInfo { relativePath = path }) = BucketItem path
 
-isBucketItem :: FileInfo -> Bool
-isBucketItem fileInfo
-    | hasMetaFile fileInfo = True
-    | otherwise            = False
+isBucketItem :: DirectoryInfo -> Bool
+isBucketItem directoryInfo
+    | hasMetaFile directoryInfo = True
+    | otherwise                 = False
 
-hasMetaFile :: FileInfo -> Bool
-hasMetaFile FileInfo { subFiles = subFiles } = "meta.txt" `elem` subFiles
+hasMetaFile :: DirectoryInfo -> Bool
+hasMetaFile DirectoryInfo { files = files } = "meta.txt" `elem` files
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
