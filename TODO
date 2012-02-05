@@ -1,3 +1,12 @@
+- Filter list when searching
+
+- Show file list at start
+
+- Handle incorrect imports
+    - Partial import where only meta was created
+    - Imports should be atomic: either everything was successful or disk not
+      changed
+
 - withTemporaryDirectory
     - Introduce "IO a" how?
     - Can withBucket use it somehow?
