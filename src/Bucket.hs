@@ -40,7 +40,7 @@ directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
         items = directoriesToItems directories
         directoriesToItems directoryInfo = map directoryToItem $ filter isBucketItem directoryInfo
-        directoryToItem (DirectoryInfo { relativePath = path }) = BucketItem path
+        directoryToItem (DirectoryInfo { path = path }) = BucketItem path
 
 isBucketItem :: DirectoryInfo -> Bool
 isBucketItem directoryInfo

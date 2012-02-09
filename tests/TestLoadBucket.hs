@@ -30,12 +30,12 @@ tests = test
             createItemAt (bucketPath bucket </> "one-item")     "item1.png"
             createItemAt (bucketPath bucket </> "another-item") "item2.png"
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
-            loadedBucket `assertHasItems` ["one-item", "another-item"]
+            loadedBucket `assertHasItems` [bucketPath bucket </> "one-item", bucketPath bucket </> "another-item"]
 
         , "loads items in subdirectories" ~: withBucket $ \((tmpDir, bucket)) -> do
             createItemAt (bucketPath bucket </> "subdir" </> "one-item") "item1.png"
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
-            loadedBucket `assertHasItems` ["subdir" </> "one-item"]
+            loadedBucket `assertHasItems` [bucketPath bucket </> "subdir" </> "one-item"]
 
         , "skips files which are not items" ~: withBucket $ \((tmpDir, bucket)) -> do
             createEmptyFile (bucketPath bucket </> "not-an-item.png")
