@@ -18,16 +18,24 @@ showMainWindow currentBucketRef = do
 
     itemsModel    <- itemsTreeModelNew
 
+    let updateItemList = createUpdateItemList itemsModel currentBucketRef searchText
+
     mainWindow    `onDestroy`         mainQuit
-    importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef itemsModel
-    searchText    `onEditableChanged` handleSearchTextChanged searchText
+    importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef updateItemList
+    searchText    `onEditableChanged` updateItemList
     itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
 
     initItemsTreeView itemsTreeView itemsModel
-    bucket <- readIORef currentBucketRef
-    updateModel itemsModel (bucketItems bucket)
+    updateItemList
 
     widgetShowAll mainWindow
+
+createUpdateItemList :: ItemsTreeModel -> IORef Bucket -> Entry -> IO ()
+createUpdateItemList model bucketRef searchText = do
+    bucket <- readIORef bucketRef
+    searchString <- editableGetChars searchText 0 (-1)
+    let filteredItems = filter (\x -> True) (bucketItems bucket)
+    updateModel model filteredItems
 
 builderFromFile :: FilePath -> IO Builder
 builderFromFile path = do
@@ -50,19 +58,15 @@ createNameColumn model = do
         \item -> [cellText := itemPath item]
     return column
 
-handleImportButtonClicked fileChooser currentBucketRef itemsModel = do
+handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
     response <- dialogRun fileChooser
     when (response == ResponseOk) $ do
         Just file <- fileChooserGetFilename fileChooser
         currentBucket <- readIORef currentBucketRef
         newBucket <- importFile currentBucket file
         writeIORef currentBucketRef newBucket
-        updateModel itemsModel (bucketItems newBucket)
+        updateItemList
     widgetHide fileChooser
-
-handleSearchTextChanged searchText = do
-    allText <- editableGetChars searchText 0 (-1)
-    putStrLn $ "serach text changed: " ++ allText
 
 handleItemActivated treeView model treePath treeViewColumn = do
     item <- getItem treeView model treePath
