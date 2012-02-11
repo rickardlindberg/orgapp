@@ -13,10 +13,10 @@ type ItemsTreeModel = ListStore BucketItem
 itemsTreeModelNew :: IO ItemsTreeModel
 itemsTreeModelNew = listStoreNew []
 
-updateModel :: ItemsTreeModel -> Bucket -> IO ()
-updateModel model bucket = do
+updateModel :: ItemsTreeModel -> [BucketItem] -> IO ()
+updateModel model items = do
     listStoreClear model
-    mapM (listStoreAppend model) (bucketItems bucket)
+    mapM (listStoreAppend model) items
     return ()
 
 getItem :: TreeView -> ItemsTreeModel -> TreePath -> IO BucketItem

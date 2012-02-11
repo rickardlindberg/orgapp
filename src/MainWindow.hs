@@ -25,7 +25,7 @@ showMainWindow currentBucketRef = do
 
     initItemsTreeView itemsTreeView itemsModel
     bucket <- readIORef currentBucketRef
-    updateModel itemsModel bucket
+    updateModel itemsModel (bucketItems bucket)
 
     widgetShowAll mainWindow
 
@@ -57,7 +57,7 @@ handleImportButtonClicked fileChooser currentBucketRef itemsModel = do
         currentBucket <- readIORef currentBucketRef
         newBucket <- importFile currentBucket file
         writeIORef currentBucketRef newBucket
-        updateModel itemsModel newBucket
+        updateModel itemsModel (bucketItems newBucket)
     widgetHide fileChooser
 
 handleSearchTextChanged searchText = do
