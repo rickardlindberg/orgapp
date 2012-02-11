@@ -6,8 +6,8 @@ import Data.IORef
 import Graphics.UI.Gtk
 import ItemsTreeModel
 
-showMainWindow :: ItemsTreeModel -> IORef Bucket -> IO ()
-showMainWindow itemsTreeModel currentBucketRef = do
+showMainWindow :: IORef Bucket -> IO ()
+showMainWindow currentBucketRef = do
     builder       <- builderFromFile "interface.glade"
 
     mainWindow    <- builderGetObject builder castToWindow            "main_window"
@@ -16,12 +16,16 @@ showMainWindow itemsTreeModel currentBucketRef = do
     itemsTreeView <- builderGetObject builder castToTreeView          "items_tree_view"
     fileChooser   <- builderGetObject builder castToFileChooserDialog "import_file_dialog"
 
-    mainWindow    `onDestroy`         mainQuit
-    importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef itemsTreeModel
-    searchText    `onEditableChanged` handleSearchTextChanged searchText
-    itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsTreeModel
+    itemsModel    <- itemsTreeModelNew
 
-    initItemsTreeView itemsTreeView itemsTreeModel
+    mainWindow    `onDestroy`         mainQuit
+    importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef itemsModel
+    searchText    `onEditableChanged` handleSearchTextChanged searchText
+    itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
+
+    initItemsTreeView itemsTreeView itemsModel
+    bucket <- readIORef currentBucketRef
+    updateModel itemsModel bucket
 
     widgetShowAll mainWindow
 
@@ -46,14 +50,14 @@ createNameColumn model = do
         \item -> [cellText := itemPath item]
     return column
 
-handleImportButtonClicked fileChooser currentBucketRef itemsTreeModel = do
+handleImportButtonClicked fileChooser currentBucketRef itemsModel = do
     response <- dialogRun fileChooser
     when (response == ResponseOk) $ do
         Just file <- fileChooserGetFilename fileChooser
         currentBucket <- readIORef currentBucketRef
         newBucket <- importFile currentBucket file
         writeIORef currentBucketRef newBucket
-        updateModel itemsTreeModel newBucket
+        updateModel itemsModel newBucket
     widgetHide fileChooser
 
 handleSearchTextChanged searchText = do
