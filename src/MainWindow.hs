@@ -5,6 +5,7 @@ import Control.Monad
 import Data.IORef
 import Graphics.UI.Gtk
 import ItemsTreeModel
+import SearchFilter
 
 showMainWindow :: IORef Bucket -> IO ()
 showMainWindow currentBucketRef = do
@@ -34,7 +35,7 @@ createUpdateItemList :: ItemsTreeModel -> IORef Bucket -> Entry -> IO ()
 createUpdateItemList model bucketRef searchText = do
     bucket <- readIORef bucketRef
     searchString <- editableGetChars searchText 0 (-1)
-    let filteredItems = filter (\x -> True) (bucketItems bucket)
+    let filteredItems = filter (matchSearch searchString) (bucketItems bucket)
     updateModel model filteredItems
 
 builderFromFile :: FilePath -> IO Builder

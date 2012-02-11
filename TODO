@@ -1,4 +1,4 @@
-- Filter list when searching
+- Filter list when searching (implement matchSearch)
 
 - Handle incorrect imports
     - Partial import where only meta was created
