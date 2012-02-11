@@ -12,12 +12,14 @@ main :: IO ()
 main = do
     initGUI
     itemsTreeModel <- itemsTreeModelNew
-    currentBucketRef <- loadDefaultBucket
+    bucket <- loadDefaultBucket
+    currentBucketRef <- newIORef bucket
     showMainWindow itemsTreeModel currentBucketRef
+    updateModel itemsTreeModel bucket
     mainGUI
 
-loadDefaultBucket :: IO (IORef Bucket)
+loadDefaultBucket :: IO Bucket
 loadDefaultBucket = do
     home <- getHomeDirectory
     Just bucket <- loadBucketFrom $ home </> "org-app-bucket"
-    newIORef bucket
+    return bucket
