@@ -5,10 +5,41 @@
 
 - Store metadata on import and read back when bucket loaded
 
+- Bugs
+    - Import import/load bucket (relative vs absolute)
+
 - Handle incorrect imports
     - Partial import where only meta was created
     - Imports should be atomic: either everything was successful or disk not
       changed
+    - Importing a file that is already inside the bucket
+    - Import file from /tmp causes rename error (cross device bla bla)
+
+    - crashes
+        - open app
+        - import bar
+        - close app
+        - open app
+        - import bar
+        -> Main: /home/rick/org-app-bucket/bar-1: createDirectory: already exists
+        (File exists)
+
+    - different named files
+        - spaces (names, directories)
+        - meta.txt
+            - collides with hard coded meta file
+        - .file could result in "" item name
+            - "" item name should be prevented
+        - file contains chars illegal in dir names (which?)
+
+- Error cases to handle
+    - Opening item which has disappeared from disk
+        - Perhaps not a problem since it will be handled by external command
+    - When things go wrong (permission error, disk full)
+    - When bucket has changed on disk
+
+- Repair bucket
+    - re-create meta.txt for items that miss it
 
 - withTemporaryDirectory
     - Introduce "IO a" how?
