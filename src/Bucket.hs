@@ -58,7 +58,7 @@ hasMetaFile DirectoryInfo { files = files } = "meta.txt" `elem` files
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
 importFile bucket srcPath meta = do
     createDirectory itemDirectory
-    createMetaFile meta itemDirectory
+    writeMeta meta (itemDirectory </> "meta.txt")
     renameFile srcPath itemPath
     return $ extendBucketWith itemName
     where
@@ -67,10 +67,6 @@ importFile bucket srcPath meta = do
         itemPath                  = itemDirectory </> srcFileName
         srcFileName               = takeFileName srcPath
         extendBucketWith itemName = addItem bucket (BucketItem itemName)
-
-createMetaFile :: Meta -> FilePath -> IO ()
-createMetaFile meta itemDirectory = do
-    openFile (itemDirectory </> "meta.txt") WriteMode >>= hClose
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
