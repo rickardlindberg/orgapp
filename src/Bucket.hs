@@ -15,6 +15,8 @@ import System.Directory
 import System.FilePath
 import System.IO
 
+metaFileName = "meta.txt"
+
 data Bucket = Bucket {
     bucketPath  :: FilePath,
     bucketItems :: [BucketItem]
@@ -53,12 +55,12 @@ isBucketItem directoryInfo
     | otherwise                 = False
 
 hasMetaFile :: DirectoryInfo -> Bool
-hasMetaFile DirectoryInfo { files = files } = "meta.txt" `elem` files
+hasMetaFile DirectoryInfo { files = files } = metaFileName `elem` files
 
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
 importFile bucket srcPath meta = do
     createDirectory itemDirectory
-    writeMeta meta (itemDirectory </> "meta.txt")
+    writeMeta meta (itemDirectory </> metaFileName)
     renameFile srcPath itemPath
     return $ extendBucketWith itemName
     where
