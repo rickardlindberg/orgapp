@@ -5,6 +5,7 @@ import Control.Monad
 import Data.IORef
 import Graphics.UI.Gtk
 import ItemsTreeModel
+import Meta
 import SearchFilter
 
 showMainWindow :: IORef Bucket -> IO ()
@@ -64,7 +65,7 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
     when (response == ResponseOk) $ do
         Just file <- fileChooserGetFilename fileChooser
         currentBucket <- readIORef currentBucketRef
-        newBucket <- importFile currentBucket file
+        newBucket <- importFile currentBucket file createMeta
         writeIORef currentBucketRef newBucket
         updateItemList
     widgetHide fileChooser

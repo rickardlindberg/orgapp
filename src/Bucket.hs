@@ -10,6 +10,7 @@ module Bucket
 
 import Data.List
 import DirectoryInfo
+import Meta
 import System.Directory
 import System.FilePath
 import System.IO
@@ -54,10 +55,10 @@ isBucketItem directoryInfo
 hasMetaFile :: DirectoryInfo -> Bool
 hasMetaFile DirectoryInfo { files = files } = "meta.txt" `elem` files
 
-importFile :: Bucket -> FilePath -> IO Bucket
-importFile bucket srcPath = do
+importFile :: Bucket -> FilePath -> Meta -> IO Bucket
+importFile bucket srcPath meta = do
     createDirectory itemDirectory
-    createMetaFile srcPath itemDirectory
+    createMetaFile meta itemDirectory
     renameFile srcPath itemPath
     return $ extendBucketWith itemName
     where
@@ -67,8 +68,8 @@ importFile bucket srcPath = do
         srcFileName               = takeFileName srcPath
         extendBucketWith itemName = addItem bucket (BucketItem itemName)
 
-createMetaFile :: FilePath -> FilePath -> IO ()
-createMetaFile srcPath itemDirectory = do
+createMetaFile :: Meta -> FilePath -> IO ()
+createMetaFile meta itemDirectory = do
     openFile (itemDirectory </> "meta.txt") WriteMode >>= hClose
 
 createItemName :: [BucketItem] -> FilePath -> String
