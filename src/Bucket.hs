@@ -4,6 +4,7 @@ module Bucket
     , importFile
     , createItemName
     , Bucket(..)
+    , addItem
     , BucketItem(..)
     ) where
 
@@ -16,7 +17,10 @@ import System.IO
 data Bucket = Bucket {
     bucketPath  :: FilePath,
     bucketItems :: [BucketItem]
-} deriving (Show)
+} deriving (Eq, Show)
+
+addItem :: Bucket -> BucketItem -> Bucket
+addItem bucket item = bucket { bucketItems = item:(bucketItems bucket) }
 
 data BucketItem = BucketItem {
     itemPath :: FilePath
@@ -61,9 +65,7 @@ importFile bucket srcPath = do
         itemName                  = createItemName (bucketItems bucket) srcPath
         itemPath                  = itemDirectory </> srcFileName
         srcFileName               = takeFileName srcPath
-        extendBucketWith itemName = bucket {
-            bucketItems = (BucketItem itemName):(bucketItems bucket)
-        }
+        extendBucketWith itemName = addItem bucket (BucketItem itemName)
 
 createMetaFile :: FilePath -> FilePath -> IO ()
 createMetaFile srcPath itemDirectory = do
