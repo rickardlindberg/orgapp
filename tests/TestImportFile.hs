@@ -2,8 +2,10 @@ module TestImportFile (tests) where
 
 import Asserts
 import Bucket
+import Control.Exception
 import Fixtures
 import Meta
+import Prelude hiding (catch)
 import System.FilePath
 import Test.HUnit
 
@@ -24,6 +26,15 @@ tests = test
         bucket <- importFile bucket file1 createMeta
         bucket <- importFile bucket file2 createMeta
         bucket `assertHasItems` ["file1-1", "file2-1"]
+
+    , "does not leave a trace in bucket if importing fails" ~: withBucket $ \((tmpDir, bucket)) -> do
+        let importNonExistingFile = do
+            importFile bucket (tmpDir </> "nonExistingFile.png") createMeta
+            assertFailure "importing should have thrown IOException"
+        let assertBucketHasNoTraceOfFile = \e -> do
+            let _ = (e :: IOException)
+            assertDirectoryDoesNotExist $ (bucketPath bucket) </> "nonExistingFile-1"
+        catch importNonExistingFile assertBucketHasNoTraceOfFile
 
     , "an item has a unique name" ~:
 

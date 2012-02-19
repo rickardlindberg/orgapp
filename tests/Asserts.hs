@@ -13,6 +13,10 @@ assertFileDoesNotExist file = doesFileExist file >>= \exists -> assertBool ("fil
 
 assertFileExists file = doesFileExist file >>= assertBool ("file '" ++ file ++ "' does not exist")
 
+assertDirectoryDoesNotExist dir = do
+    exists <- doesDirectoryExist dir
+    assertBool ("directory '" ++ dir ++ "' does exist") (not exists)
+
 assertDirectoryExists dir = do
     exists <- doesDirectoryExist dir
     assertBool "directory does not exist" exists

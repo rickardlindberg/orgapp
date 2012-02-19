@@ -8,6 +8,7 @@ module Bucket
     , BucketItem(..)
     ) where
 
+import Control.Exception
 import Data.List
 import DirectoryInfo
 import Meta
@@ -58,17 +59,24 @@ hasMetaFile :: DirectoryInfo -> Bool
 hasMetaFile DirectoryInfo { files = files } = metaFileName `elem` files
 
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
-importFile bucket srcPath meta = do
-    createDirectory itemDirectory
-    writeMeta meta (itemDirectory </> metaFileName)
-    renameFile srcPath itemPath
-    return $ extendBucketWith itemName
+importFile bucket srcPath meta =
+    prepareDirectory itemDirectory $ do
+        writeMeta meta (itemDirectory </> metaFileName)
+        renameFile srcPath itemPath
+        return $ extendBucketWith itemName
     where
         itemDirectory             = bucketPath bucket </> itemName
         itemName                  = createItemName (bucketItems bucket) srcPath
         itemPath                  = itemDirectory </> srcFileName
         srcFileName               = takeFileName srcPath
         extendBucketWith itemName = addItem bucket (BucketItem itemName)
+
+prepareDirectory :: FilePath -> IO a -> IO a
+prepareDirectory path action =
+    bracketOnError
+        (createDirectory path >> return path)
+        removeDirectoryRecursive
+        (\_ -> action)
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
