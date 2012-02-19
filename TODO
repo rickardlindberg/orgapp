@@ -1,5 +1,3 @@
-- Filter list when searching (implement matchSearch)
-
 - Store metadata on import and read back when bucket loaded
 
 - Handle incorrect imports
