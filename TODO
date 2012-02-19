@@ -2,9 +2,6 @@
 
 - Store metadata on import and read back when bucket loaded
 
-- Bugs
-    - Import import/load bucket (relative vs absolute)
-
 - Handle incorrect imports
     - Partial import where only meta was created
     - Imports should be atomic: either everything was successful or disk not

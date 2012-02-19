@@ -25,7 +25,7 @@ tests = test
         file2 <- createEmptyFile $ tmpDir </> "file2.png"
         bucket <- importFile bucket file1 createMeta
         bucket <- importFile bucket file2 createMeta
-        bucket `assertHasItems` ["file1-1", "file2-1"]
+        bucket `assertHasItems` [bucketPath bucket </> "file1-1", bucketPath bucket </> "file2-1"]
 
     , "does not leave a trace in bucket if importing fails" ~: withBucket $ \((tmpDir, bucket)) -> do
         let importNonExistingFile = do

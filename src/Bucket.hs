@@ -69,7 +69,7 @@ importFile bucket srcPath meta =
         itemName                  = createItemName (bucketItems bucket) srcPath
         itemPath                  = itemDirectory </> srcFileName
         srcFileName               = takeFileName srcPath
-        extendBucketWith itemName = addItem bucket (BucketItem itemName)
+        extendBucketWith itemName = addItem bucket (BucketItem itemDirectory)
 
 prepareDirectory :: FilePath -> IO a -> IO a
 prepareDirectory path action =
