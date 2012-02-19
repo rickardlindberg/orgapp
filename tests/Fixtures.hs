@@ -33,3 +33,6 @@ createItemAt :: FilePath -> FilePath -> IO FilePath
 createItemAt path name = do
     createEmptyFile (path </> name)
     createEmptyFile (path </> "meta.txt")
+
+anItemWithName :: String -> BucketItem
+anItemWithName name = BucketItem ("/tmp/" ++ name)

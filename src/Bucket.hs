@@ -82,8 +82,9 @@ createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
     where
         idealItemName = takeBaseName filePath
-        itemsWithSamePrefix = filter (idealItemName `isPrefixOf`) (map itemPath existingItems)
+        itemNames = map (takeFileName . itemPath) existingItems
+        itemsWithSamePrefix = filter (idealItemName `isPrefixOf`) itemNames
         uniqueItemName = untilUnique idealItemName 1
-        isUnique name = name `notElem` (map itemPath existingItems)
+        isUnique name = name `notElem` itemNames
         untilUnique name n | isUnique (name ++ "-" ++ (show n)) = name ++ "-" ++ (show n)
                            | otherwise     = untilUnique name (n + 1)

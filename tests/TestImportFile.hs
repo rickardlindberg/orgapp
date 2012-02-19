@@ -42,9 +42,9 @@ tests = test
             (createItemName [] "/tmp/foo.png") @?= "foo-1"
 
         , "when it's the third file with the same name" ~: do
-            (createItemName [BucketItem "foo", BucketItem "foo-1"] "/tmp/foo.png") @?= "foo-2"
+            (createItemName [anItemWithName "foo", anItemWithName "foo-1"] "/tmp/foo.png") @?= "foo-2"
 
         , "when one of the existing items with same name has been deleted" ~: do
-            (createItemName [BucketItem "foo", BucketItem "foo-2"] "/tmp/foo.png") @?= "foo-1"
+            (createItemName [anItemWithName "foo", anItemWithName "foo-2"] "/tmp/foo.png") @?= "foo-1"
         ]
     ]
