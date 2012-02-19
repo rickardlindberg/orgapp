@@ -35,9 +35,5 @@
 - Repair bucket
     - re-create meta.txt for items that miss it
 
-- withTemporaryDirectory
-    - Introduce "IO a" how?
-    - Can withBucket use it somehow?
-
 - Infrastructure
     - Automatically find tests in modules

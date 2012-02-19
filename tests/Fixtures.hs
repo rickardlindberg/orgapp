@@ -6,14 +6,14 @@ import System.Directory
 import System.FilePath
 import System.IO
 
-withTemporaryDirectory :: (FilePath -> IO ()) -> IO ()
+withTemporaryDirectory :: (FilePath -> IO a) -> IO a
 withTemporaryDirectory = bracket setUp tearDown
     where
         tmpDir   = "/tmp/org-app"
         setUp    = createDirectory tmpDir >> return tmpDir
         tearDown = removeDirectoryRecursive
 
-withBucket :: ((FilePath, Bucket) -> IO ()) -> IO ()
+withBucket :: ((FilePath, Bucket) -> IO a) -> IO a
 withBucket = bracket setUp tearDown
     where
         tmpDir     = "/tmp/org-app"
