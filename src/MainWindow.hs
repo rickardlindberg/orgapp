@@ -6,6 +6,7 @@ import Data.IORef
 import Graphics.UI.Gtk
 import ItemsTreeModel
 import Meta
+import Open
 import SearchFilter
 
 showMainWindow :: IORef Bucket -> IO ()
@@ -70,6 +71,5 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
         updateItemList
     widgetHide fileChooser
 
-handleItemActivated treeView model treePath treeViewColumn = do
-    item <- getItem treeView model treePath
-    putStrLn $ "activated item: " ++ (itemPath item)
+handleItemActivated treeView model treePath treeViewColumn =
+    getItem treeView model treePath >>= open

@@ -1,8 +1,5 @@
 - Filter list when searching (implement matchSearch)
 
-- Open file when double clicking or pressing enter on it (extend
-  handleItemActivated)
-
 - Store metadata on import and read back when bucket loaded
 
 - Bugs
