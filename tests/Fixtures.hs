@@ -2,6 +2,7 @@ module Fixtures where
 
 import Bucket
 import Control.Exception.Base (bracket)
+import Meta
 import System.Directory
 import System.FilePath
 import System.IO
@@ -35,4 +36,4 @@ createItemAt path name = do
     createEmptyFile (path </> "meta.txt")
 
 anItemWithName :: String -> BucketItem
-anItemWithName name = BucketItem ("/tmp/" ++ name)
+anItemWithName name = BucketItem ("/tmp/" ++ name) createMeta

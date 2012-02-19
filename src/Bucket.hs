@@ -27,7 +27,8 @@ addItem :: Bucket -> BucketItem -> Bucket
 addItem bucket item = bucket { bucketItems = item:(bucketItems bucket) }
 
 data BucketItem = BucketItem {
-    itemPath :: FilePath
+    itemPath :: FilePath,
+    itemMeta :: Meta
 } deriving (Eq, Show)
 
 createBucket :: FilePath -> IO Bucket
@@ -48,7 +49,7 @@ directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
         items = directoriesToItems directories
         directoriesToItems directoryInfo = map directoryToItem $ filter isBucketItem directoryInfo
-        directoryToItem (DirectoryInfo { path = path }) = BucketItem path
+        directoryToItem (DirectoryInfo { path = path }) = BucketItem path createMeta
 
 isBucketItem :: DirectoryInfo -> Bool
 isBucketItem directoryInfo
@@ -69,7 +70,7 @@ importFile bucket srcPath meta =
         itemName                  = createItemName (bucketItems bucket) srcPath
         itemPath                  = itemDirectory </> srcFileName
         srcFileName               = takeFileName srcPath
-        extendBucketWith itemName = addItem bucket (BucketItem itemDirectory)
+        extendBucketWith itemName = addItem bucket (BucketItem itemDirectory createMeta)
 
 prepareDirectory :: FilePath -> IO a -> IO a
 prepareDirectory path action =

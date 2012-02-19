@@ -1,12 +1,13 @@
 import Bucket
 import Control.Monad
+import Meta
 import Test.QuickCheck
 
 instance Arbitrary Bucket where
     arbitrary = liftM2 Bucket arbitratyPath arbitrary
 
 instance Arbitrary BucketItem where
-    arbitrary = liftM BucketItem arbitratyPath
+    arbitrary = liftM2 BucketItem arbitratyPath (return createMeta)
 
 arbitratyPath :: Gen FilePath
 arbitratyPath = oneof [ return "/tmp", return "/home" ]
@@ -19,7 +20,11 @@ ourListOfStrings =
         , vectorOf 3 itemNameGenerator
         ]
     where
-        itemNameGenerator = elements [BucketItem "foo", BucketItem "foo-1", BucketItem "foo-2"]
+        itemNameGenerator = elements
+            [ BucketItem "foo" createMeta
+            , BucketItem "foo-1" createMeta
+            , BucketItem "foo-2" createMeta
+            ]
 
 prop_name_is_unique :: Property
 prop_name_is_unique =

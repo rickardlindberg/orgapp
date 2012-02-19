@@ -8,7 +8,7 @@ import System.IO
 
 data Meta = Meta {
     foo :: [String]
-}
+} deriving (Eq, Show)
 
 createMeta = Meta []
 
