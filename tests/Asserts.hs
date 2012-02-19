@@ -1,28 +1,39 @@
 module Asserts where
 
 import Bucket
+import Control.Monad
 import qualified Data.Set as Set
 import System.Directory
 import Test.HUnit
 
+assertMovedTo :: FilePath -> FilePath -> Assertion
 assertMovedTo src dest = do
     assertFileExists dest
     assertFileDoesNotExist src
 
-assertFileDoesNotExist file = doesFileExist file >>= \exists -> assertBool ("file '" ++file ++ "' does exist") (not exists)
+assertFileExists :: FilePath -> Assertion
+assertFileExists file =
+    doesFileExist file >>=
+    assertBool ("expected file '" ++ file ++ "' to exist")
 
-assertFileExists file = doesFileExist file >>= assertBool ("file '" ++ file ++ "' does not exist")
+assertFileDoesNotExist :: FilePath -> Assertion
+assertFileDoesNotExist file =
+    liftM not (doesFileExist file) >>=
+    assertBool ("expected file '" ++ file ++ "' to not exist")
 
-assertDirectoryDoesNotExist dir = do
-    exists <- doesDirectoryExist dir
-    assertBool ("directory '" ++ dir ++ "' does exist") (not exists)
+assertDirectoryExists :: FilePath -> Assertion
+assertDirectoryExists dir =
+    doesDirectoryExist dir >>=
+    assertBool ("expected directory '" ++ dir ++ "' to exist")
 
-assertDirectoryExists dir = do
-    exists <- doesDirectoryExist dir
-    assertBool "directory does not exist" exists
+assertDirectoryDoesNotExist :: FilePath -> Assertion
+assertDirectoryDoesNotExist dir =
+    liftM not (doesDirectoryExist dir) >>=
+    assertBool ("expeected directory '" ++ dir ++ "' to not exist")
 
 assertHasItems :: Bucket -> [String] -> Assertion
-assertHasItems bucket itemNames = (map itemPath (bucketItems bucket)) `shouldBeSameAs` itemNames
+assertHasItems bucket itemNames =
+    (map itemPath (bucketItems bucket)) `shouldBeSameAs` itemNames
 
 shouldBeSameAs :: [String] -> [String] -> Assertion
 shouldBeSameAs filesInBucket expectedFiles =
