@@ -66,6 +66,7 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
     when (response == ResponseOk) $ do
         Just file <- fileChooserGetFilename fileChooser
         currentBucket <- readIORef currentBucketRef
+        -- TODO: create meta from user input
         newBucket <- importFile currentBucket file createMeta
         writeIORef currentBucketRef newBucket
         updateItemList

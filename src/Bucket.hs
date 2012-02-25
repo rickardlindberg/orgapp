@@ -49,6 +49,7 @@ directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
         items = directoriesToItems directories
         directoriesToItems directoryInfo = map directoryToItem $ filter isBucketItem directoryInfo
+        -- TODO: parse meta from file
         directoryToItem (DirectoryInfo { path = path }) = BucketItem path createMeta
 
 isBucketItem :: DirectoryInfo -> Bool

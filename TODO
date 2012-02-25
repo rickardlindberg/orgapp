@@ -1,5 +1,3 @@
-- Store metadata on import and read back when bucket loaded
-
 - Handle incorrect imports
     - Partial import where only meta was created
     - Imports should be atomic: either everything was successful or disk not
