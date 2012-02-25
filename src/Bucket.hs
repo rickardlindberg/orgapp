@@ -67,6 +67,7 @@ importFile bucket srcPath meta =
         itemDir = itemPath newItem
     in prepareDirectory itemDir $ do
         writeMeta newMeta (itemDir </> metaFileName)
+        -- TODO: copy and delete after instead to be more safe; how to test?
         renameFile srcPath (itemDir </> (filename newMeta))
         return $ addItem bucket newItem
 
