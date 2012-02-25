@@ -2,6 +2,7 @@ module Asserts where
 
 import Bucket
 import Control.Monad
+import Data.List
 import qualified Data.Set as Set
 import System.Directory
 import Test.HUnit
@@ -15,6 +16,13 @@ assertFileExists :: FilePath -> Assertion
 assertFileExists file =
     doesFileExist file >>=
     assertBool ("expected file '" ++ file ++ "' to exist")
+
+assertFileContains :: FilePath -> String -> Assertion
+assertFileContains file needle = do
+    contents <- readFile file
+    assertBool ("expected file '" ++ file ++ "' to contain '" ++ needle ++
+                "' but was:\n" ++ contents)
+               (needle `isInfixOf` contents)
 
 assertFileDoesNotExist :: FilePath -> Assertion
 assertFileDoesNotExist file =

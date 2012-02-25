@@ -18,7 +18,8 @@ tests = test
     , "importing a file creates a meta.txt file" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         importFile bucket aSourceFile createMeta
-        assertFileExists (bucketPath bucket </> "a-file-1" </> "meta.txt")
+        let metaFile = (bucketPath bucket </> "a-file-1" </> "meta.txt")
+        assertFileContains metaFile "name::a-file.png"
 
     , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         file1 <- createEmptyFile $ tmpDir </> "file1.png"
