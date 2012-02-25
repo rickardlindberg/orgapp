@@ -91,6 +91,7 @@ createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
     where
         idealItemName = takeBaseName filePath
+        -- TODO: take into consideration in which subdirectory the item is in
         itemNames = map (takeFileName . itemPath) existingItems
         itemsWithSamePrefix = filter (idealItemName `isPrefixOf`) itemNames
         uniqueItemName = untilUnique idealItemName 1
