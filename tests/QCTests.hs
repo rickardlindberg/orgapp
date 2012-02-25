@@ -9,6 +9,14 @@ instance Arbitrary Bucket where
 instance Arbitrary BucketItem where
     arbitrary = liftM2 BucketItem arbitratyPath (return createMeta)
 
+instance Arbitrary Meta where
+    arbitrary = do
+        f <- arbitraryMetaValue
+        return (setFilename f createMeta)
+
+arbitraryMetaValue :: Gen String
+arbitraryMetaValue = oneof [ return "foo", return "bar" ]
+
 arbitratyPath :: Gen FilePath
 arbitratyPath = oneof [ return "/tmp", return "/home" ]
 
@@ -39,6 +47,9 @@ prop_adding_item_makes_bucket_bigger bucket item = newSize == oldSize + 1
         newSize   = length $ bucketItems newBucket
         oldSize   = length $ bucketItems bucket
 
+prop_roundtrip_meta meta = metaFromStr (metaToStr meta) == meta
+
 main = do
     quickCheck prop_name_is_unique
     quickCheck prop_adding_item_makes_bucket_bigger
+    quickCheck prop_roundtrip_meta
