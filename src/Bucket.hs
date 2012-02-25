@@ -47,8 +47,7 @@ directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
         items = directoriesToItems directories
         directoriesToItems = map directoryToItem . filter hasMetaFile
-        -- TODO: parse meta from file
-        directoryToItem (DirectoryInfo { path = path }) = BucketItem path createMeta
+        directoryToItem (DirectoryInfo { path = path, meta = Just meta }) = BucketItem path (metaFromStr meta)
 
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
 importFile bucket srcPath meta =

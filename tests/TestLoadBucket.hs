@@ -4,6 +4,7 @@ import Asserts
 import Bucket
 import Data.Maybe
 import Fixtures
+import Meta
 import System.Directory
 import System.FilePath
 import Test.HUnit
@@ -41,5 +42,12 @@ tests = test
             createEmptyFile (bucketPath bucket </> "not-an-item.png")
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
             loadedBucket `assertHasItems` []
+
+        , "loads meta back" ~: withBucket $ \((tmpDir, bucket)) -> do
+            file <- createEmptyFile $ tmpDir </> "file1.png"
+            importFile bucket file createMeta
+            Just loadedBucket <- loadBucketFrom (bucketPath bucket)
+            let item = head (bucketItems loadedBucket)
+            filename (itemMeta item) @?= "file1.png"
         ]
     ]

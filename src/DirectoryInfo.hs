@@ -13,7 +13,8 @@ metaFileName = "meta.txt"
 
 data DirectoryInfo = DirectoryInfo {
     path  :: FilePath,
-    files :: [String]
+    files :: [String],
+    meta  :: Maybe String
 } deriving (Eq, Show)
 
 getDirectoryInfoRecursive :: FilePath -> IO [DirectoryInfo]
@@ -35,7 +36,10 @@ dirToInfo :: FilePath -> IO DirectoryInfo
 dirToInfo dir = do
     contents <- getDirectoryContents dir
     files    <- filterM (\path -> isFile (dir </> path)) contents
-    return   $  DirectoryInfo dir files
+    meta     <- case metaFileName `elem` files of
+                    True  -> readFile (dir </> metaFileName) >>= return . Just
+                    False -> return Nothing
+    return   $  DirectoryInfo dir files meta
 
 isFile :: FilePath -> IO Bool
 isFile = liftM not . doesDirectoryExist
