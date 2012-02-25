@@ -1,11 +1,15 @@
 module DirectoryInfo
     ( DirectoryInfo(..)
     , getDirectoryInfoRecursive
+    , metaFileName
+    , hasMetaFile
     ) where
 
 import Control.Monad
 import System.Directory
 import System.FilePath
+
+metaFileName = "meta.txt"
 
 data DirectoryInfo = DirectoryInfo {
     path  :: FilePath,
@@ -35,3 +39,6 @@ dirToInfo dir = do
 
 isFile :: FilePath -> IO Bool
 isFile = liftM not . doesDirectoryExist
+
+hasMetaFile :: DirectoryInfo -> Bool
+hasMetaFile DirectoryInfo { files = files } = metaFileName `elem` files

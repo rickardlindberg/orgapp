@@ -16,8 +16,6 @@ import System.Directory
 import System.FilePath
 import System.IO
 
-metaFileName = "meta.txt"
-
 data Bucket = Bucket {
     bucketPath  :: FilePath,
     bucketItems :: [BucketItem]
@@ -48,17 +46,9 @@ directoriesToBucket :: FilePath -> [DirectoryInfo] -> Bucket
 directoriesToBucket pathToBucket directories = Bucket pathToBucket items
     where
         items = directoriesToItems directories
-        directoriesToItems directoryInfo = map directoryToItem $ filter isBucketItem directoryInfo
+        directoriesToItems = map directoryToItem . filter hasMetaFile
         -- TODO: parse meta from file
         directoryToItem (DirectoryInfo { path = path }) = BucketItem path createMeta
-
-isBucketItem :: DirectoryInfo -> Bool
-isBucketItem directoryInfo
-    | hasMetaFile directoryInfo = True
-    | otherwise                 = False
-
-hasMetaFile :: DirectoryInfo -> Bool
-hasMetaFile DirectoryInfo { files = files } = metaFileName `elem` files
 
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
 importFile bucket srcPath meta =
