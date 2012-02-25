@@ -5,6 +5,5 @@ import System.Process
 
 open :: BucketItem -> IO ()
 open item = do
-    -- TODO: specify path to file instead of item
-    createProcess (proc "xdg-open" [itemPath item])
+    createProcess (proc "xdg-open" [itemFilePath item])
     return ()

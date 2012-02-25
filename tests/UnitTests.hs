@@ -1,3 +1,4 @@
+import qualified TestBucket as TestBucket
 import qualified TestCreateBucket as TestCreateBucket
 import qualified TestImportFile as TestImportFile
 import qualified TestLoadBucket as TestLoadBucket
@@ -7,7 +8,8 @@ import System.Exit
 import Test.HUnit
 
 allTests = test
-    [ TestCreateBucket.tests
+    [ TestBucket.tests
+    , TestCreateBucket.tests
     , TestImportFile.tests
     , TestLoadBucket.tests
     , TestMeta.tests
