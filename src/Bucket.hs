@@ -62,7 +62,7 @@ hasMetaFile DirectoryInfo { files = files } = metaFileName `elem` files
 
 importFile :: Bucket -> FilePath -> Meta -> IO Bucket
 importFile bucket srcPath meta =
-    let newItem = bucketItemFrom bucket srcPath meta
+    let newItem = bucketItemFromSrc bucket srcPath meta
         newMeta = itemMeta newItem
         itemDir = itemPath newItem
     in prepareDirectory itemDir $ do
@@ -71,21 +71,21 @@ importFile bucket srcPath meta =
         renameFile srcPath (itemDir </> (filename newMeta))
         return $ addItem bucket newItem
 
-bucketItemFrom :: Bucket -> FilePath -> Meta -> BucketItem
-bucketItemFrom bucket srcPath meta = BucketItem itemDirectory updatedMeta
-    where
-        updatedMeta   = setFilename srcFileName meta
-        itemDirectory = bucketPath bucket </> itemName
-        itemName      = createItemName (bucketItems bucket) srcPath
-        itemFilePath  = itemDirectory </> srcFileName
-        srcFileName   = takeFileName srcPath
-
 prepareDirectory :: FilePath -> IO a -> IO a
 prepareDirectory path action =
     bracketOnError
         (createDirectory path >> return path)
         removeDirectoryRecursive
         (\_ -> action)
+
+bucketItemFromSrc :: Bucket -> FilePath -> Meta -> BucketItem
+bucketItemFromSrc bucket srcPath meta = BucketItem itemDirectory updatedMeta
+    where
+        updatedMeta   = setFilename srcFileName meta
+        itemDirectory = bucketPath bucket </> itemName
+        itemName      = createItemName (bucketItems bucket) srcPath
+        itemFilePath  = itemDirectory </> srcFileName
+        srcFileName   = takeFileName srcPath
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
