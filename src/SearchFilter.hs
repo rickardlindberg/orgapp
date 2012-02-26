@@ -1,8 +1,8 @@
 module SearchFilter (matchSearch) where
 
 import Bucket.Types
+import Data.Text
 
 matchSearch :: String -> BucketItem -> Bool
 matchSearch searchString item =
-    -- TODO: implement smart search
-    True
+    toLower (pack searchString) `isInfixOf` toLower (pack (itemFileName item))
