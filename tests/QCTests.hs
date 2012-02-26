@@ -33,7 +33,7 @@ prop_name_is_unique =
     forAll ourListOfStrings $ \itemNames ->
         let newItemName = createItemName itemNames ("/tmp/" ++ aItem ++ ".png")
             aItem = itemPath $ head itemNames
-        in newItemName `notElem` (map itemPath itemNames)
+        in newItemName `notElem` map itemPath itemNames
 
 prop_adding_item_makes_bucket_bigger bucket item = newSize == oldSize + 1
     where

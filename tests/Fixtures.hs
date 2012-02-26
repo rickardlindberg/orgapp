@@ -28,7 +28,7 @@ withBucket = bracket setUp tearDown
 
 createEmptyFile :: FilePath -> IO FilePath
 createEmptyFile path =
-    (createDirectoryIfMissing True (takeDirectory path)) >>
+    createDirectoryIfMissing True (takeDirectory path) >>
     openFile path WriteMode >>= hClose >> return path
 
 createItemAt :: FilePath -> FilePath -> IO FilePath

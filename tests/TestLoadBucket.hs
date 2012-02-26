@@ -20,7 +20,7 @@ tests = test
 
         [ "returns bucket with path" ~: withBucket $ \((tmpDir, bucket)) -> do
             Just loadedBucket <- loadBucketFrom $ bucketPath bucket
-            (bucketPath loadedBucket) @?= (bucketPath bucket)
+            bucketPath loadedBucket @?= bucketPath bucket
 
         , "returns bucket with no items" ~: withBucket $ \((tmpDir, bucket)) -> do
             Just loadedBucket <- loadBucketFrom $ bucketPath bucket

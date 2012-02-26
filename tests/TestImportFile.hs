@@ -35,18 +35,18 @@ tests = test
             assertFailure "importing should have thrown IOException"
         let assertBucketHasNoTraceOfFile = \e -> do
             let _ = (e :: IOException)
-            assertDirectoryDoesNotExist $ (bucketPath bucket) </> "nonExistingFile-1"
+            assertDirectoryDoesNotExist $ bucketPath bucket </> "nonExistingFile-1"
         catch importNonExistingFile assertBucketHasNoTraceOfFile
 
     , "an item has a unique name" ~:
 
-        [ "when it's the only file" ~: do
-            (createItemName [] "/tmp/foo.png") @?= "foo-1"
+        [ "when it's the only file" ~:
+            createItemName [] "/tmp/foo.png" @?= "foo-1"
 
-        , "when it's the third file with the same name" ~: do
-            (createItemName [anItemWithName "foo", anItemWithName "foo-1"] "/tmp/foo.png") @?= "foo-2"
+        , "when it's the third file with the same name" ~:
+            createItemName [anItemWithName "foo", anItemWithName "foo-1"] "/tmp/foo.png" @?= "foo-2"
 
-        , "when one of the existing items with same name has been deleted" ~: do
-            (createItemName [anItemWithName "foo", anItemWithName "foo-2"] "/tmp/foo.png") @?= "foo-1"
+        , "when one of the existing items with same name has been deleted" ~:
+            createItemName [anItemWithName "foo", anItemWithName "foo-2"] "/tmp/foo.png" @?= "foo-1"
         ]
     ]

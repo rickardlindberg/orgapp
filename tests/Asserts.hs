@@ -41,7 +41,7 @@ assertDirectoryDoesNotExist dir =
 
 assertHasItems :: Bucket -> [String] -> Assertion
 assertHasItems bucket itemNames =
-    (map itemPath (bucketItems bucket)) `shouldBeSameAs` itemNames
+    map itemPath (bucketItems bucket) `shouldBeSameAs` itemNames
 
 shouldBeSameAs :: [String] -> [String] -> Assertion
 shouldBeSameAs filesInBucket expectedFiles =

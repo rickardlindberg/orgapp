@@ -13,7 +13,7 @@ tests = test
         createEmptyFile $ tmpDir </> "b-dir" </> "b-file.png"
         createDirectory $ tmpDir </> "b-dir" </> "c-dir"
         info <- getDirectoryInfoRecursive tmpDir
-        info @?= [ DirectoryInfo (tmpDir)                         ["a-file.png"] Nothing
+        info @?= [ DirectoryInfo  tmpDir                          ["a-file.png"] Nothing
                  , DirectoryInfo (tmpDir </> "b-dir")             ["b-file.png"] Nothing
                  , DirectoryInfo (tmpDir </> "b-dir" </> "c-dir") []             Nothing
                  ]

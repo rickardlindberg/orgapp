@@ -15,7 +15,7 @@ importFile bucket srcPath meta =
         itemDir = itemPath newItem
     in prepareDirectory itemDir $ do
         writeMeta newMeta (itemDir </> metaFileName)
-        copyFile srcPath (itemDir </> (metaFilename newMeta))
+        copyFile srcPath (itemDir </> metaFilename newMeta)
         return $ addItem bucket newItem
 
 prepareDirectory :: FilePath -> IO a -> IO a
@@ -43,5 +43,5 @@ createItemName existingItems filePath = uniqueItemName
         itemsWithSamePrefix = filter (idealItemName `isPrefixOf`) itemNames
         uniqueItemName = untilUnique idealItemName 1
         isUnique name = name `notElem` itemNames
-        untilUnique name n | isUnique (name ++ "-" ++ (show n)) = name ++ "-" ++ (show n)
+        untilUnique name n | isUnique (name ++ "-" ++ show n) = name ++ "-" ++ show n
                            | otherwise     = untilUnique name (n + 1)

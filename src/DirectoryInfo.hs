@@ -30,7 +30,7 @@ mapDirectories fn rootDir = do
         case isDirectory of
             True  -> mapDirectories fn fullPath
             False -> return []
-    return $ thisDir:(concat innerDirs)
+    return $ thisDir:concat innerDirs
 
 dirToInfo :: FilePath -> IO DirectoryInfo
 dirToInfo dir = do

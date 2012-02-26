@@ -14,7 +14,7 @@ data BucketItem = BucketItem {
 } deriving (Eq, Show)
 
 addItem :: Bucket -> BucketItem -> Bucket
-addItem bucket item = bucket { bucketItems = item:(bucketItems bucket) }
+addItem bucket item = bucket { bucketItems = item:bucketItems bucket }
 
 itemFilePath :: BucketItem -> FilePath
 itemFilePath item = itemPath item </> itemFileName item

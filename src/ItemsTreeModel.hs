@@ -16,7 +16,7 @@ itemsTreeModelNew = listStoreNew []
 updateModel :: ItemsTreeModel -> [BucketItem] -> IO ()
 updateModel model items = do
     listStoreClear model
-    mapM (listStoreAppend model) items
+    mapM_ (listStoreAppend model) items
     return ()
 
 getItem :: TreeView -> ItemsTreeModel -> TreePath -> IO BucketItem
