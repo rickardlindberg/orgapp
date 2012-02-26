@@ -8,7 +8,7 @@ tests = test
     [ "reading meta" ~:
 
         [ "filename" ~: do
-            let meta = metaFromStr "name::foo.png\n"
+            let meta = metaFromStr "filename::foo.png\n"
             metaFilename meta @?= "foo.png"
         ]
 

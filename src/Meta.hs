@@ -8,8 +8,8 @@ newtype Meta = Meta (M.Map String String)
     deriving (Eq, Show)
 
 createMeta = Meta M.empty
-metaFilename = getValue "name" ""
-setFilename = setValue "name"
+metaFilename = getValue "filename" ""
+setFilename = setValue "filename"
 
 writeMeta :: Meta -> FilePath -> IO ()
 writeMeta meta destination = writeFile destination (metaToStr meta)
