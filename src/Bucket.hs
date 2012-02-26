@@ -10,6 +10,7 @@ module Bucket
     , itemFileName
     ) where
 
+import Bucket.Types
 import Control.Exception
 import Data.List
 import DirectoryInfo
@@ -17,19 +18,6 @@ import Meta
 import System.Directory
 import System.FilePath
 import System.IO
-
-data Bucket = Bucket {
-    bucketPath  :: FilePath,
-    bucketItems :: [BucketItem]
-} deriving (Eq, Show)
-
-addItem :: Bucket -> BucketItem -> Bucket
-addItem bucket item = bucket { bucketItems = item:(bucketItems bucket) }
-
-data BucketItem = BucketItem {
-    itemPath :: FilePath,
-    itemMeta :: Meta
-} deriving (Eq, Show)
 
 createBucket :: FilePath -> IO Bucket
 createBucket path = do
@@ -89,9 +77,3 @@ createItemName existingItems filePath = uniqueItemName
         isUnique name = name `notElem` itemNames
         untilUnique name n | isUnique (name ++ "-" ++ (show n)) = name ++ "-" ++ (show n)
                            | otherwise     = untilUnique name (n + 1)
-
-itemFilePath :: BucketItem -> FilePath
-itemFilePath item = itemPath item </> itemFileName item
-
-itemFileName :: BucketItem -> FilePath
-itemFileName item = metaFilename (itemMeta item)
