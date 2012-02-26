@@ -7,6 +7,7 @@ module Bucket
     , addItem
     , BucketItem(..)
     , itemFilePath
+    , itemFileName
     ) where
 
 import Control.Exception
@@ -90,4 +91,7 @@ createItemName existingItems filePath = uniqueItemName
                            | otherwise     = untilUnique name (n + 1)
 
 itemFilePath :: BucketItem -> FilePath
-itemFilePath item = itemPath item </> metaFilename (itemMeta item)
+itemFilePath item = itemPath item </> itemFileName item
+
+itemFileName :: BucketItem -> FilePath
+itemFileName item = metaFilename (itemMeta item)

@@ -58,7 +58,7 @@ createNameColumn model = do
     column       <- treeViewColumnNew
     treeViewColumnPackStart column textRenderer True
     cellLayoutSetAttributes column textRenderer model $
-        \item -> [cellText := itemPath item]
+        \item -> [cellText := itemFileName item]
     return column
 
 handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
