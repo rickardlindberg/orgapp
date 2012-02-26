@@ -4,21 +4,24 @@ import System.IO
 import Text.ParserCombinators.Parsec
 
 data Meta = Meta {
-    filename :: String
+    filenameOld :: String
 } deriving (Eq, Show)
 
-createMeta = Meta { filename = "" }
+createMeta = Meta { filenameOld = "" }
 
 setFilename :: String -> Meta -> Meta
-setFilename filename meta = meta { filename = filename }
+setFilename filename meta = meta { filenameOld = filename }
+
+metaFilename :: Meta -> String
+metaFilename Meta { filenameOld = f } = f
 
 metaToStr :: Meta -> String
-metaToStr meta = "name::" ++ filename meta ++ "\n"
+metaToStr meta = "name::" ++ filenameOld meta ++ "\n"
 
 metaFromStr :: String -> Meta
 metaFromStr str =
     let pairs = parseMeta str
-    in Meta { filename = findKey "name" pairs }
+    in Meta { filenameOld = findKey "name" pairs }
 
 parseMeta :: String -> [(String, String)]
 parseMeta input =
