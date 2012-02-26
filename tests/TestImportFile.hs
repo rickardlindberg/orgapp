@@ -1,7 +1,8 @@
 module TestImportFile (tests) where
 
 import Asserts
-import Bucket
+import Bucket.Import
+import Bucket.Types
 import Control.Exception
 import Fixtures
 import Meta

@@ -1,6 +1,7 @@
 module MainWindow (showMainWindow) where
 
-import Bucket
+import Bucket.Import
+import Bucket.Types
 import Control.Monad
 import Data.IORef
 import Graphics.UI.Gtk

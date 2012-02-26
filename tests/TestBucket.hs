@@ -1,6 +1,6 @@
 module TestBucket (tests) where
 
-import Bucket
+import Bucket.Types
 import Meta
 import Test.HUnit
 

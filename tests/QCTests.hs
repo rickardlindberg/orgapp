@@ -1,4 +1,5 @@
-import Bucket
+import Bucket.Import
+import Bucket.Types
 import Control.Monad
 import Meta
 import qualified TestMeta as TestMeta

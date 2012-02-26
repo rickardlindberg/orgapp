@@ -1,7 +1,9 @@
 module TestLoadBucket (tests) where
 
 import Asserts
-import Bucket
+import Bucket.Import
+import Bucket.Load
+import Bucket.Types
 import Data.Maybe
 import Fixtures
 import Meta

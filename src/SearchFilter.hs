@@ -1,6 +1,6 @@
 module SearchFilter (matchSearch) where
 
-import Bucket
+import Bucket.Types
 
 matchSearch :: String -> BucketItem -> Bool
 matchSearch searchString item =

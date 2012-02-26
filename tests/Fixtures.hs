@@ -1,6 +1,7 @@
 module Fixtures where
 
-import Bucket
+import Bucket.Load
+import Bucket.Types
 import Control.Exception.Base (bracket)
 import Meta
 import System.Directory

@@ -1,7 +1,8 @@
 module TestCreateBucket (tests) where
 
 import Asserts
-import Bucket
+import Bucket.Load
+import Bucket.Types
 import Fixtures
 import System.FilePath
 import Test.HUnit

@@ -1,6 +1,6 @@
 module Asserts where
 
-import Bucket
+import Bucket.Types
 import Control.Monad
 import Data.List
 import qualified Data.Set as Set

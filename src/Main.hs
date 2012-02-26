@@ -1,6 +1,7 @@
 module Main (main) where
 
-import Bucket
+import Bucket.Load
+import Bucket.Types
 import Data.IORef
 import Graphics.UI.Gtk
 import MainWindow

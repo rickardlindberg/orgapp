@@ -1,6 +1,6 @@
 module Open (open) where
 
-import Bucket
+import Bucket.Types
 import System.Process
 
 open :: BucketItem -> IO ()

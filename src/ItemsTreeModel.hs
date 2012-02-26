@@ -5,7 +5,7 @@ module ItemsTreeModel
     , getItem
     ) where
 
-import Bucket
+import Bucket.Types
 import Graphics.UI.Gtk
 
 type ItemsTreeModel = ListStore BucketItem
