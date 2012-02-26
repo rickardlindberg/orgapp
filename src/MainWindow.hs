@@ -9,6 +9,7 @@ import ItemsTreeModel
 import Meta
 import Open
 import SearchFilter
+import System.Directory
 
 showMainWindow :: IORef Bucket -> IO ()
 showMainWindow currentBucketRef = do
@@ -68,7 +69,10 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
         Just file <- fileChooserGetFilename fileChooser
         currentBucket <- readIORef currentBucketRef
         -- TODO: create meta from user input
+        -- TODO: show error dialog if file can't be imported
         newBucket <- importFile currentBucket file createMeta
+        -- TODO: show warning dialog if file can't be removed
+        removeFile file
         writeIORef currentBucketRef newBucket
         updateItemList
     widgetHide fileChooser

@@ -11,10 +11,10 @@ import System.FilePath
 import Test.HUnit
 
 tests = test
-    [ "importing a file moves it inside the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
+    [ "importing a file copies it inside the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         importFile bucket aSourceFile createMeta
-        aSourceFile `assertMovedTo` (bucketPath bucket </> "a-file-1" </> "a-file.png")
+        assertFileExists (bucketPath bucket </> "a-file-1" </> "a-file.png")
 
     , "importing a file creates a meta.txt file" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
