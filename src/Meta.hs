@@ -1,27 +1,33 @@
 module Meta where
 
+import qualified Data.Map as M
 import System.IO
 import Text.ParserCombinators.Parsec
 
-data Meta = Meta {
-    filenameOld :: String
-} deriving (Eq, Show)
+newtype Meta = Meta (M.Map String String)
+    deriving (Eq, Show)
 
-createMeta = Meta { filenameOld = "" }
+createMeta = Meta M.empty
+metaFilename = getValue "name" ""
+setFilename = setValue "name"
 
-setFilename :: String -> Meta -> Meta
-setFilename filename meta = meta { filenameOld = filename }
-
-metaFilename :: Meta -> String
-metaFilename Meta { filenameOld = f } = f
+writeMeta :: Meta -> FilePath -> IO ()
+writeMeta meta destination = writeFile destination (metaToStr meta)
 
 metaToStr :: Meta -> String
-metaToStr meta = "name::" ++ filenameOld meta ++ "\n"
+metaToStr (Meta m) = concat $ map (\(a, b) -> a ++ "::" ++ b ++ "\n") (M.toList m)
 
 metaFromStr :: String -> Meta
-metaFromStr str =
-    let pairs = parseMeta str
-    in Meta { filenameOld = findKey "name" pairs }
+metaFromStr str = Meta $ M.fromList (parseMeta str)
+
+getValue :: String -> String -> Meta -> String
+getValue key defaultValue (Meta m) =
+    case key `M.lookup` m of
+        Nothing -> defaultValue
+        Just x  -> x
+
+setValue :: String -> String -> Meta -> Meta
+setValue key value (Meta m) = Meta $ M.insert key value m
 
 parseMeta :: String -> [(String, String)]
 parseMeta input =
@@ -44,8 +50,3 @@ parseMeta input =
         sep   = string "::"
         value = many (noneOf "\n")
         eol   = char '\n'
-
-findKey key = snd . head . filter (\(a, b) -> a == key)
-
-writeMeta :: Meta -> FilePath -> IO ()
-writeMeta meta destination = writeFile destination (metaToStr meta)

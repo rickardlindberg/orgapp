@@ -5,10 +5,24 @@ import Test.HUnit
 import Test.QuickCheck
 
 tests = test
-    [ "parsing meta examples" ~: do
-        parseMeta "" @?= []
-        parseMeta "foo::bar\n" @?= [("foo", "bar")]
-        parseMeta "foo::bar\na::b\n" @?= [("foo", "bar"), ("a", "b")]
+    [ "reading meta" ~:
+
+        [ "filename" ~: do
+            let meta = metaFromStr "name::foo.png\n"
+            metaFilename meta @?= "foo.png"
+        ]
+
+    , "preserves unkonw fields" ~: do
+        let metaFile = "unknownField::5\n"
+        metaToStr (metaFromStr metaFile) @?= metaFile
+
+    , "implementation details" ~:
+
+        [ "parses text into list of pairs" ~: do
+            parseMeta ""                 @?= []
+            parseMeta "foo::bar\n"       @?= [("foo", "bar")]
+            parseMeta "foo::bar\na::b\n" @?= [("foo", "bar"), ("a", "b")]
+        ]
     ]
 
 prop_roundtrip_meta meta = metaFromStr (metaToStr meta) == meta

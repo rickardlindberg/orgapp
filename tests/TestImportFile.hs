@@ -19,7 +19,7 @@ tests = test
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         importFile bucket aSourceFile createMeta
         let metaFile = (bucketPath bucket </> "a-file-1" </> "meta.txt")
-        assertFileContains metaFile "name::a-file.png"
+        assertFileContains metaFile "name::a-file.png\n"
 
     , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         file1 <- createEmptyFile $ tmpDir </> "file1.png"
