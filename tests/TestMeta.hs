@@ -34,7 +34,7 @@ props =
 instance Arbitrary Meta where
     arbitrary = do
         f <- arbitraryMetaValue
-        return (setFilename f createMeta)
+        return (setValue "filename" f createMeta)
 
 arbitraryMetaValue :: Gen String
 arbitraryMetaValue = oneof [ return "foo", return "bar" ]
