@@ -20,4 +20,4 @@ itemFilePath :: BucketItem -> FilePath
 itemFilePath item = itemPath item </> itemFileName item
 
 itemFileName :: BucketItem -> FilePath
-itemFileName item = metaFilename (itemMeta item)
+itemFileName item = getValue "filename" "" (itemMeta item)

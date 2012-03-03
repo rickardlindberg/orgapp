@@ -9,7 +9,7 @@ tests = test
 
         [ "filename" ~: do
             let meta = metaFromStr "filename::foo.png\n"
-            metaFilename meta @?= "foo.png"
+            getValue "filename" "" meta @?= "foo.png"
         ]
 
     , "preserves unkonw fields" ~: do
