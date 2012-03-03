@@ -26,9 +26,8 @@ prepareDirectory path action =
         (\_ -> action)
 
 bucketItemFromSrc :: Bucket -> FilePath -> Meta -> BucketItem
-bucketItemFromSrc bucket srcPath meta = BucketItem itemDirectory updatedMeta
+bucketItemFromSrc bucket srcPath meta = setItemFileName (BucketItem itemDirectory meta) srcFileName
     where
-        updatedMeta   = setValue "filename" srcFileName meta
         itemDirectory = bucketPath bucket </> itemName
         itemName      = createItemName (bucketItems bucket) srcPath
         itemFilePath  = itemDirectory </> srcFileName

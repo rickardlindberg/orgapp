@@ -6,6 +6,6 @@ import Test.HUnit
 
 tests = test
     [ "can get path to item file" ~: do
-        let item = BucketItem "a/path" (setValue "filename" "bar.png" createMeta)
+        let item = setItemFileName (BucketItem "a/path" createMeta) "bar.png"
         itemFilePath item @?= "a/path/bar.png"
     ]
