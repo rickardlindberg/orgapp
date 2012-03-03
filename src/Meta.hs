@@ -10,33 +10,34 @@ newtype Meta = Meta (M.Map String String)
 
 createMeta = Meta M.empty
 
-writeMeta :: Meta -> FilePath -> IO ()
-writeMeta meta destination = writeFile destination (metaToStr meta)
-
-metaToStr :: Meta -> String
-metaToStr (Meta m) = concatMap (\(a, b) -> a ++ "::" ++ b ++ "\n") (M.toList m)
-
-metaFromStr :: String -> Meta
-metaFromStr str = Meta $ M.fromList (parseMeta str)
-
 getValue :: String -> String -> Meta -> String
 getValue key defaultValue (Meta m) = fromMaybe defaultValue (key `M.lookup` m)
 
 setValue :: String -> String -> Meta -> Meta
 setValue key value (Meta m) = Meta $ M.insert key value m
 
+writeMeta :: Meta -> FilePath -> IO ()
+writeMeta meta destination = writeFile destination (metaToStr meta)
+
+metaToStr :: Meta -> String
+metaToStr (Meta m) = concatMap entryToLine (M.toList m)
+    where
+        entryToLine (key, value) = key ++ "::" ++ value ++ "\n"
+
+metaFromStr :: String -> Meta
+metaFromStr str = Meta $ M.fromList (parseMeta str)
+
 parseMeta :: String -> [(String, String)]
 parseMeta input =
     case parse file "" input of
-        Left _  -> []
+        Left  _ -> []
         Right x -> x
     where
-        file :: Parser [(String, String)]
-        file  = do
+        file = do
             lines <- many line
             eof
             return lines
-        line  = do
+        line = do
             key <- key
             sep
             value <- value
