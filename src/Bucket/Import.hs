@@ -15,7 +15,7 @@ importFile bucket srcPath meta =
         itemDir = itemPath newItem
     in prepareDirectory itemDir $ do
         writeMeta newMeta (itemDir </> metaFileName)
-        copyFile srcPath (itemDir </> metaFilename newMeta)
+        copyFile srcPath (itemDir </> itemFileName newItem)
         return $ addItem bucket newItem
 
 prepareDirectory :: FilePath -> IO a -> IO a

@@ -50,6 +50,6 @@ tests = test
             importFile bucket file createMeta
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
             let item = head (bucketItems loadedBucket)
-            metaFilename (itemMeta item) @?= "file1.png"
+            itemFileName item @?= "file1.png"
         ]
     ]
