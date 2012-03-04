@@ -4,6 +4,7 @@ import Bucket.Import
 import Bucket.Types
 import Control.Monad
 import Data.IORef
+import Data.List
 import Graphics.UI.Gtk
 import ItemsTreeModel
 import Meta
@@ -20,6 +21,9 @@ showMainWindow currentBucketRef = do
     searchText    <- builderGetObject builder castToEntry             "search_text"
     itemsTreeView <- builderGetObject builder castToTreeView          "items_tree_view"
     fileChooser   <- builderGetObject builder castToFileChooserDialog "import_file_dialog"
+    editButton    <- builderGetObject builder castToButton            "edit_button"
+    tagEditor     <- builderGetObject builder castToDialog            "tag_editor_dialog"
+    tagEditorText <- builderGetObject builder castToEntry             "tags_text"
 
     itemsModel    <- itemsTreeModelNew
 
@@ -29,6 +33,7 @@ showMainWindow currentBucketRef = do
     importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef updateItemList
     searchText    `onEditableChanged` updateItemList
     itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
+    editButton    `onClicked`         handleEditButtonClicked tagEditor itemsTreeView itemsModel tagEditorText
 
     initItemsTreeView itemsTreeView itemsModel
     updateItemList
@@ -79,3 +84,12 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
 
 handleItemActivated treeView model treePath treeViewColumn =
     getItem treeView model treePath >>= open
+
+handleEditButtonClicked tagEditor treeView model tagEditorText = do
+    (treePath, _) <- treeViewGetCursor treeView
+    item <- getItem treeView model treePath
+    entrySetText tagEditorText (intercalate ", " (itemTags item))
+    response <- dialogRun tagEditor
+    when (response == ResponseOk) $ do
+        putStrLn $ itemFileName item
+    widgetHide tagEditor
