@@ -20,10 +20,10 @@ itemFilePath :: BucketItem -> FilePath
 itemFilePath item = itemPath item </> itemFileName item
 
 itemFileName :: BucketItem -> FilePath
-itemFileName item = getValue "filename" "" (itemMeta item)
+itemFileName = getValue "filename" "" . itemMeta
 
 setItemFileName :: BucketItem -> FilePath -> BucketItem
 setItemFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path meta)
 
 itemTags :: BucketItem -> [String]
-itemTags item = getValues "tag" (itemMeta item)
+itemTags = getValues "tag" . itemMeta
