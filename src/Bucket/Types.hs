@@ -9,11 +9,6 @@ data Bucket = Bucket {
     bucketItemsMap :: (M.Map FilePath BucketItem)
 } deriving (Eq, Show)
 
-data BucketItem = BucketItem {
-    itemPath :: FilePath,
-    itemMeta :: Meta
-} deriving (Eq, Show)
-
 addItem :: Bucket -> BucketItem -> Bucket
 addItem bucket item = bucket { bucketItemsMap = M.insert (itemPath item) item (bucketItemsMap bucket) }
 
@@ -21,6 +16,11 @@ bucketItems (Bucket _ m) = M.elems m
 
 bucketFromList :: FilePath -> [BucketItem] -> Bucket
 bucketFromList path items = Bucket path (M.fromList (map (\a -> (itemPath a, a)) items))
+
+data BucketItem = BucketItem {
+    itemPath :: FilePath,
+    itemMeta :: Meta
+} deriving (Eq, Show)
 
 itemFilePath :: BucketItem -> FilePath
 itemFilePath item = itemPath item </> itemFileName item
