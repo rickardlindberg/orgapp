@@ -8,7 +8,7 @@ import System.Directory
 createBucket :: FilePath -> IO Bucket
 createBucket path = do
     createDirectory path
-    return $ Bucket path []
+    return $ bucketFromList path []
 
 loadBucketFrom :: FilePath -> IO (Maybe Bucket)
 loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketWhenExists
@@ -19,7 +19,7 @@ loadBucketFrom pathToBucket = doesDirectoryExist pathToBucket >>= loadBucketWhen
             return $ Just $ directoriesToBucket pathToBucket directories
 
 directoriesToBucket :: FilePath -> [DirectoryInfo] -> Bucket
-directoriesToBucket pathToBucket directories = Bucket pathToBucket items
+directoriesToBucket pathToBucket directories = bucketFromList pathToBucket items
     where
         items = directoriesToItems directories
         directoriesToItems = map directoryToItem . filter hasMetaFile

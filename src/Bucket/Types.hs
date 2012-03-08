@@ -1,11 +1,12 @@
 module Bucket.Types where
 
 import Meta
+import qualified Data.Map as M
 import System.FilePath
 
 data Bucket = Bucket {
-    bucketPath  :: FilePath,
-    bucketItems :: [BucketItem]
+    bucketPath     :: FilePath,
+    bucketItemsMap :: (M.Map FilePath BucketItem)
 } deriving (Eq, Show)
 
 data BucketItem = BucketItem {
@@ -14,7 +15,12 @@ data BucketItem = BucketItem {
 } deriving (Eq, Show)
 
 addItem :: Bucket -> BucketItem -> Bucket
-addItem bucket item = bucket { bucketItems = item:bucketItems bucket }
+addItem bucket item = bucket { bucketItemsMap = M.insert (itemPath item) item (bucketItemsMap bucket) }
+
+bucketItems (Bucket _ m) = M.elems m
+
+bucketFromList :: FilePath -> [BucketItem] -> Bucket
+bucketFromList path items = Bucket path (M.fromList (map (\a -> (itemPath a, a)) items))
 
 itemFilePath :: BucketItem -> FilePath
 itemFilePath item = itemPath item </> itemFileName item

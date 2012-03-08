@@ -1,18 +1,25 @@
 import Bucket.Import
 import Bucket.Types
 import Control.Monad
+import Data.List
 import Meta
+import qualified Data.Map as M
 import qualified TestMeta as TestMeta
 import Test.QuickCheck
 
 instance Arbitrary Bucket where
-    arbitrary = liftM2 Bucket arbitratyPath arbitrary
+    arbitrary = liftM2 bucketFromList arbitratyPath arbitrary
 
 instance Arbitrary BucketItem where
-    arbitrary = liftM2 BucketItem arbitratyPath (return createMeta)
+    arbitrary = liftM2 BucketItem arbitratyPath arbitrary
 
 arbitratyPath :: Gen FilePath
-arbitratyPath = oneof [ return "/tmp", return "/home" ]
+arbitratyPath = do
+    dirs <- listOf1 arbitraryDirName
+    return $ "/" ++ (intercalate "/" dirs)
+
+arbitraryDirName :: Gen String
+arbitraryDirName = listOf1 $ elements ['a'..'z']
 
 ourListOfStrings :: Gen [BucketItem]
 ourListOfStrings =
@@ -35,7 +42,8 @@ prop_name_is_unique =
             aItem = itemPath $ head itemNames
         in newItemName `notElem` map itemPath itemNames
 
-prop_adding_item_makes_bucket_bigger bucket item = newSize == oldSize + 1
+prop_adding_item_makes_bucket_bigger bucket item =
+    M.notMember (itemPath item) (bucketItemsMap bucket) ==> newSize == oldSize + 1
     where
         newBucket = addItem bucket item
         newSize   = length $ bucketItems newBucket
