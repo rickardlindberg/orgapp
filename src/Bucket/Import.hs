@@ -30,7 +30,6 @@ bucketItemFromSrc bucket srcPath meta = setItemFileName (BucketItem itemDirector
     where
         itemDirectory = bucketPath bucket </> itemName
         itemName      = createItemName (bucketItems bucket) srcPath
-        itemFilePath  = itemDirectory </> srcFileName
         srcFileName   = takeFileName srcPath
 
 createItemName :: [BucketItem] -> FilePath -> String
