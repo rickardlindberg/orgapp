@@ -5,5 +5,5 @@ import System.Process
 
 open :: BucketItem -> IO ()
 open item = do
-    createProcess (proc "xdg-open" [itemFilePath item])
+    createProcess (proc "xdg-open" [filePath item])
     return ()

@@ -22,8 +22,8 @@ data BucketItem = BucketItem {
     itemMeta :: Meta
 } deriving (Eq, Show)
 
-itemFilePath :: BucketItem -> FilePath
-itemFilePath item = itemPath item </> itemFileName item
+filePath :: BucketItem -> FilePath
+filePath item = itemPath item </> itemFileName item
 
 itemFileName :: BucketItem -> FilePath
 itemFileName = getValue "filename" "" . itemMeta
