@@ -65,7 +65,7 @@ createNameColumn model = do
     column       <- treeViewColumnNew
     treeViewColumnPackStart column textRenderer True
     cellLayoutSetAttributes column textRenderer model $
-        \item -> [cellText := itemFileName item]
+        \item -> [cellText := fileName item]
     return column
 
 handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
@@ -91,5 +91,5 @@ handleEditButtonClicked tagEditor treeView model tagEditorText = do
     entrySetText tagEditorText (intercalate ", " (itemTags item))
     response <- dialogRun tagEditor
     when (response == ResponseOk) $ do
-        putStrLn $ itemFileName item
+        putStrLn $ fileName item
     widgetHide tagEditor

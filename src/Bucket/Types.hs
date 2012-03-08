@@ -23,10 +23,10 @@ data BucketItem = BucketItem {
 } deriving (Eq, Show)
 
 filePath :: BucketItem -> FilePath
-filePath item = itemPath item </> itemFileName item
+filePath item = itemPath item </> fileName item
 
-itemFileName :: BucketItem -> FilePath
-itemFileName = getValue "filename" "" . itemMeta
+fileName :: BucketItem -> FilePath
+fileName = getValue "filename" "" . itemMeta
 
 setItemFileName :: BucketItem -> FilePath -> BucketItem
 setItemFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path meta)
