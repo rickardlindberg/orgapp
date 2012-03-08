@@ -28,8 +28,8 @@ filePath item = itemPath item </> fileName item
 fileName :: BucketItem -> FilePath
 fileName = getValue "filename" "" . itemMeta
 
-setItemFileName :: BucketItem -> FilePath -> BucketItem
-setItemFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path meta)
+setFileName :: BucketItem -> FilePath -> BucketItem
+setFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path meta)
 
 tags :: BucketItem -> [String]
 tags = getValues "tag" . itemMeta
