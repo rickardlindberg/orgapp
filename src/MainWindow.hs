@@ -88,7 +88,7 @@ handleItemActivated treeView model treePath treeViewColumn =
 handleEditButtonClicked tagEditor treeView model tagEditorText = do
     (treePath, _) <- treeViewGetCursor treeView
     item <- getItem treeView model treePath
-    entrySetText tagEditorText (intercalate ", " (itemTags item))
+    entrySetText tagEditorText (intercalate ", " (tags item))
     response <- dialogRun tagEditor
     when (response == ResponseOk) $ do
         putStrLn $ fileName item
