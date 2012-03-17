@@ -87,7 +87,7 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
         currentBucket <- readIORef currentBucketRef
         -- TODO: create meta from user input
         -- TODO: show error dialog if file can't be imported
-        newBucket <- importFile currentBucket file createMeta
+        newBucket <- importFile currentBucket file
         -- TODO: show warning dialog if file can't be removed
         removeFile file
         writeIORef currentBucketRef newBucket

@@ -15,7 +15,7 @@ import Test.HUnit
 tests = test
     [ "editing an item changes the meta on disk" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
-        bucket <- importFile bucket aSourceFile createMeta
+        bucket <- importFile bucket aSourceFile
         let item = head (bucketItems bucket)
         let newItem = setTags item ["foo"]
         newBucket <- editItem bucket item newItem
@@ -23,7 +23,7 @@ tests = test
 
     , "editing an item returns an updated bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
-        bucket <- importFile bucket aSourceFile createMeta
+        bucket <- importFile bucket aSourceFile
         let item = head (bucketItems bucket)
         let newItem = setTags item ["foo"]
         newBucket <- editItem bucket item newItem

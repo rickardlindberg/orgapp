@@ -8,9 +8,9 @@ import Meta
 import System.Directory
 import System.FilePath
 
-importFile :: Bucket -> FilePath -> Meta -> IO Bucket
-importFile bucket srcPath meta =
-    let newItem = bucketItemFromSrc bucket srcPath meta
+importFile :: Bucket -> FilePath -> IO Bucket
+importFile bucket srcPath =
+    let newItem = bucketItemFromSrc bucket srcPath createMeta
         newMeta = itemMeta newItem
         itemDir = itemPath newItem
     in prepareDirectory itemDir $ do

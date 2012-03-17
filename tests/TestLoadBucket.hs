@@ -47,7 +47,7 @@ tests = test
 
         , "loads meta back" ~: withBucket $ \((tmpDir, bucket)) -> do
             file <- createEmptyFile $ tmpDir </> "file1.png"
-            importFile bucket file createMeta
+            importFile bucket file
             Just loadedBucket <- loadBucketFrom (bucketPath bucket)
             let item = head (bucketItems loadedBucket)
             fileName item @?= "file1.png"
