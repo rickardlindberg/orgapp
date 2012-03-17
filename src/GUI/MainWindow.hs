@@ -60,6 +60,7 @@ initItemsTreeView treeView model = do
     treeViewSetModel treeView model
     createNameColumn model >>= treeViewAppendColumn treeView
     createTagsColumn model >>= treeViewAppendColumn treeView
+    createDateColumn model >>= treeViewAppendColumn treeView
     return ()
 
 createNameColumn :: ItemsTreeModel -> IO TreeViewColumn
@@ -78,6 +79,15 @@ createTagsColumn model = do
     treeViewColumnPackStart column textRenderer True
     cellLayoutSetAttributes column textRenderer model $
         \item -> [cellText := "(" ++ (intercalate "," (tags item)) ++ ")", cellTextForeground := "#aaaaaa"]
+    return column
+
+createDateColumn :: ItemsTreeModel -> IO TreeViewColumn
+createDateColumn model = do
+    textRenderer <- cellRendererTextNew
+    column       <- treeViewColumnNew
+    treeViewColumnPackStart column textRenderer True
+    cellLayoutSetAttributes column textRenderer model $
+        \item -> [cellText := creationDate item]
     return column
 
 handleImportButtonClicked fileChooser currentBucketRef updateItemList = do

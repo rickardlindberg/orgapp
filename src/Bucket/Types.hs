@@ -37,5 +37,8 @@ tags = getValues "tag" . itemMeta
 setTags :: BucketItem -> [String] -> BucketItem
 setTags (BucketItem a meta) tags = BucketItem a (setValues "tag" tags meta)
 
+creationDate :: BucketItem -> String
+creationDate = getValue "creationdate" "" . itemMeta
+
 setCreationDate :: BucketItem -> String -> BucketItem
 setCreationDate (BucketItem a meta) date = BucketItem a (setValue "creationdate" date meta)
