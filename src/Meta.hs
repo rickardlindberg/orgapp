@@ -2,7 +2,6 @@ module Meta where
 
 import Data.Maybe
 import qualified Data.Map as M
-import System.IO
 import Text.ParserCombinators.Parsec
 
 newtype Meta = Meta (M.Map String [String])

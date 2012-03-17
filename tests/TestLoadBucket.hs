@@ -6,8 +6,6 @@ import Bucket.Load
 import Bucket.Types
 import Data.Maybe
 import Fixtures
-import Meta
-import System.Directory
 import System.FilePath
 import Test.HUnit
 

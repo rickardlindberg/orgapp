@@ -4,10 +4,8 @@ import Asserts
 import Bucket.EditItem
 import Bucket.Import
 import Bucket.Types
-import Control.Exception
 import DirectoryInfo
 import Fixtures
-import Meta
 import Prelude hiding (catch)
 import System.FilePath
 import Test.HUnit

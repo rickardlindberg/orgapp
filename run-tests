@@ -1,6 +1,6 @@
 #!/bin/sh
 ./compile-app &&
-ghc -isrc:tests --make tests/QCTests.hs &&
-ghc -isrc:tests --make tests/UnitTests.hs &&
+ghc -isrc:tests --make -fwarn-unused-imports -Werror tests/QCTests.hs &&
+ghc -isrc:tests --make -fwarn-unused-imports -Werror tests/UnitTests.hs &&
 ./tests/QCTests &&
 ./tests/UnitTests

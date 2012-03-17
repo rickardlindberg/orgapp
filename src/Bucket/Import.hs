@@ -2,7 +2,6 @@ module Bucket.Import where
 
 import Bucket.Types
 import Control.Exception
-import Control.Monad
 import Data.List
 import Data.Time
 import Data.Time.Clock.POSIX
@@ -11,8 +10,7 @@ import Meta
 import System.Directory
 import System.FilePath
 import System.Locale (defaultTimeLocale)
-import System.Posix (getFileStatus, accessTime, modificationTime, EpochTime, setFileTimes)
-import Text.Printf
+import System.Posix (getFileStatus, accessTime, modificationTime, setFileTimes)
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do

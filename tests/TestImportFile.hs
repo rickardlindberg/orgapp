@@ -5,10 +5,8 @@ import Bucket.Import
 import Bucket.Types
 import Control.Exception
 import Fixtures
-import Meta
 import Prelude hiding (catch)
 import System.FilePath
-import System.Time
 import Test.HUnit
 
 tests = test

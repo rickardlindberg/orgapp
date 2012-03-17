@@ -1,6 +1,5 @@
 module GUI.MainWindow (showMainWindow) where
 
-import Bucket.EditItem
 import Bucket.Import
 import Bucket.Types
 import Control.Monad
@@ -9,7 +8,6 @@ import Data.List
 import Graphics.UI.Gtk
 import GUI.ItemsTreeModel
 import GUI.TagEditor
-import Meta
 import Open
 import SearchFilter
 import System.Directory
