@@ -30,6 +30,9 @@ displayTitle item = case title item of
 title :: BucketItem -> String
 title = getValue "title" "" . itemMeta
 
+setTitle :: String -> BucketItem -> BucketItem
+setTitle title (BucketItem a meta) = BucketItem a (setValue "title" title meta)
+
 filePath :: BucketItem -> FilePath
 filePath item = itemPath item </> fileName item
 

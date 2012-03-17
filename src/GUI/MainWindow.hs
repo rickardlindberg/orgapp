@@ -24,6 +24,7 @@ showMainWindow currentBucketRef = do
     editButton    <- builderGetObject builder castToButton            "edit_button"
     itemEditor    <- builderGetObject builder castToDialog            "item_editor_dialog"
     tagsText      <- builderGetObject builder castToEntry             "tags_text"
+    titleText     <- builderGetObject builder castToEntry             "title_text"
 
     itemsModel    <- itemsTreeModelNew
 
@@ -33,7 +34,7 @@ showMainWindow currentBucketRef = do
     importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef updateItemList
     searchText    `onEditableChanged` updateItemList
     itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
-    editButton    `onClicked`         handleEditButtonClicked itemEditor itemsTreeView itemsModel tagsText currentBucketRef updateItemList
+    editButton    `onClicked`         handleEditButtonClicked itemEditor itemsTreeView itemsModel tagsText titleText currentBucketRef updateItemList
 
     initItemsTreeView itemsTreeView itemsModel
     updateItemList
