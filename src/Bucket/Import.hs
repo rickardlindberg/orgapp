@@ -11,16 +11,18 @@ import Meta
 import System.Directory
 import System.FilePath
 import System.Locale (defaultTimeLocale)
-import System.Posix (getFileStatus, modificationTime)
+import System.Posix (getFileStatus, accessTime, modificationTime, EpochTime, setFileTimes)
 import Text.Printf
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
     newItem <- bucketItemFromSrc bucket srcPath
+    (atime, mtime) <- getUnixTimestamps srcPath
     let itemDir = itemPath newItem
     prepareDirectory itemDir $ do
         writeMeta (itemMeta newItem) (itemDir </> metaFileName)
         copyFile srcPath (itemDir </> fileName newItem)
+        setFileTimes (itemDir </> fileName newItem) atime mtime
         return $ addItem bucket newItem
 
 prepareDirectory :: FilePath -> IO a -> IO a
@@ -50,6 +52,11 @@ dateStr path = do
     let utc       = posixSecondsToUTCTime posixTime
     let local     = utcToLocalTime zone utc
     return $ formatTime defaultTimeLocale "%Y-%m-%d" local
+
+getUnixTimestamps :: FilePath -> IO (EpochTime, EpochTime)
+getUnixTimestamps path = do
+    fs <- getFileStatus path
+    return (accessTime fs, modificationTime fs)
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
