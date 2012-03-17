@@ -33,9 +33,9 @@ tests = test
     , "importing a file copies modification time" ~: withBucket $ \((tmpDir, bucket)) -> do
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         setModificationTime aSourceFile 2012 2 15
-        (_, mtime1) <- getUnixTimestamps aSourceFile
+        mtime1 <- getMtime aSourceFile
         importFile bucket aSourceFile
-        (_, mtime2) <- getUnixTimestamps (bucketPath bucket </> "a-file-1" </> "a-file.png")
+        mtime2 <- getMtime (bucketPath bucket </> "a-file-1" </> "a-file.png")
         assertEqual "" mtime1 mtime2
 
     , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do

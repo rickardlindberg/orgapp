@@ -17,12 +17,11 @@ import Text.Printf
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
     newItem <- bucketItemFromSrc bucket srcPath
-    (atime, mtime) <- getUnixTimestamps srcPath
     let itemDir = itemPath newItem
     prepareDirectory itemDir $ do
         writeMeta (itemMeta newItem) (itemDir </> metaFileName)
         copyFile srcPath (itemDir </> fileName newItem)
-        setFileTimes (itemDir </> fileName newItem) atime mtime
+        copyTimestamps srcPath (itemDir </> fileName newItem)
         return $ addItem bucket newItem
 
 prepareDirectory :: FilePath -> IO a -> IO a
@@ -43,21 +42,6 @@ bucketItemFromSrc bucket srcPath = do
         itemName      = createItemName (bucketItems bucket) srcPath
         srcFileName   = takeFileName srcPath
 
-dateStr :: FilePath -> IO String
-dateStr path = do
-    fs <- getFileStatus path
-    zone <- getCurrentTimeZone
-    let mtime     = modificationTime fs
-    let posixTime = realToFrac mtime
-    let utc       = posixSecondsToUTCTime posixTime
-    let local     = utcToLocalTime zone utc
-    return $ formatTime defaultTimeLocale "%Y-%m-%d" local
-
-getUnixTimestamps :: FilePath -> IO (EpochTime, EpochTime)
-getUnixTimestamps path = do
-    fs <- getFileStatus path
-    return (accessTime fs, modificationTime fs)
-
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName
     where
@@ -69,3 +53,19 @@ createItemName existingItems filePath = uniqueItemName
         isUnique name = name `notElem` itemNames
         untilUnique name n | isUnique (name ++ "-" ++ show n) = name ++ "-" ++ show n
                            | otherwise     = untilUnique name (n + 1)
+
+dateStr :: FilePath -> IO String
+dateStr path = do
+    fs <- getFileStatus path
+    zone <- getCurrentTimeZone
+    let mtime     = modificationTime fs
+    let posixTime = realToFrac mtime
+    let utc       = posixSecondsToUTCTime posixTime
+    let local     = utcToLocalTime zone utc
+    return $ formatTime defaultTimeLocale "%Y-%m-%d" local
+
+copyTimestamps :: FilePath -> FilePath -> IO ()
+copyTimestamps from to = do
+    fromFs <- getFileStatus from
+    toFs   <- getFileStatus to
+    setFileTimes to (accessTime fromFs) (modificationTime fromFs)

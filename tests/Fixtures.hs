@@ -9,7 +9,7 @@ import Meta
 import System.Directory
 import System.FilePath
 import System.IO
-import System.Posix (setFileTimes)
+import System.Posix (getFileStatus, modificationTime, EpochTime, setFileTimes)
 
 withTemporaryDirectory :: (FilePath -> IO a) -> IO a
 withTemporaryDirectory = bracket setUp tearDown
@@ -51,3 +51,6 @@ setModificationTime path year month day = do
     atime <- return 0
     mtime <- return (fromIntegral (round posix))
     setFileTimes path atime mtime
+
+getMtime :: FilePath -> IO EpochTime
+getMtime path = getFileStatus path >>= return . modificationTime
