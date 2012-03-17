@@ -8,6 +8,7 @@ import Data.IORef
 import Data.List
 import Graphics.UI.Gtk
 import GUI.ItemsTreeModel
+import GUI.TagEditor
 import Meta
 import Open
 import SearchFilter
@@ -85,24 +86,3 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
 
 handleItemActivated treeView model treePath treeViewColumn =
     getItem treeView model treePath >>= open
-
-handleEditButtonClicked tagEditor treeView model tagEditorText currentBucketRef updateItemList = do
-    -- TODO: extract tags -> comma sep string -> tags somehere else
-    (treePath, _) <- treeViewGetCursor treeView
-    item <- getItem treeView model treePath
-    entrySetText tagEditorText (intercalate "," (tags item))
-    response <- dialogRun tagEditor
-    when (response == ResponseOk) $ do
-        currentBucket <- readIORef currentBucketRef
-        tagsText <- entryGetText tagEditorText
-        let newItem = setTags item (getTags tagsText)
-        -- TODO: show error dialog if we can't save item
-        newBucket <- editItem currentBucket item newItem
-        writeIORef currentBucketRef newBucket
-        updateItemList
-    widgetHide tagEditor
-    where
-        getTags "" = []
-        getTags s = (takeWhile notComma s):getTags (drop 1 (dropWhile notComma s))
-        notComma ',' = False
-        notComma _ = True
