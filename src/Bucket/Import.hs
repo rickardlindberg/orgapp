@@ -33,7 +33,9 @@ prepareDirectory path action =
 bucketItemFromSrc :: Bucket -> FilePath -> IO BucketItem
 bucketItemFromSrc bucket srcPath = do
     dateStr' <- dateStr srcPath
-    return $ setCreationDate (setFileName (BucketItem itemDirectory createMeta) srcFileName) dateStr'
+    return $ setCreationDate dateStr'
+           $ setFileName srcFileName
+           $ BucketItem itemDirectory createMeta
     where
         itemDirectory = bucketPath bucket </> itemName
         itemName      = createItemName (bucketItems bucket) srcPath

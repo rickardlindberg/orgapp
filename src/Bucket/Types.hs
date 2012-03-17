@@ -28,17 +28,17 @@ filePath item = itemPath item </> fileName item
 fileName :: BucketItem -> FilePath
 fileName = getValue "filename" "" . itemMeta
 
-setFileName :: BucketItem -> FilePath -> BucketItem
-setFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path meta)
+setFileName :: FilePath -> BucketItem -> BucketItem
+setFileName path (BucketItem a meta) = BucketItem a (setValue "filename" path meta)
 
 tags :: BucketItem -> [String]
 tags = getValues "tag" . itemMeta
 
-setTags :: BucketItem -> [String] -> BucketItem
-setTags (BucketItem a meta) tags = BucketItem a (setValues "tag" tags meta)
+setTags :: [String] -> BucketItem -> BucketItem
+setTags tags (BucketItem a meta) = BucketItem a (setValues "tag" tags meta)
 
 creationDate :: BucketItem -> String
 creationDate = getValue "creationdate" "" . itemMeta
 
-setCreationDate :: BucketItem -> String -> BucketItem
-setCreationDate (BucketItem a meta) date = BucketItem a (setValue "creationdate" date meta)
+setCreationDate :: String -> BucketItem -> BucketItem
+setCreationDate date (BucketItem a meta) = BucketItem a (setValue "creationdate" date meta)

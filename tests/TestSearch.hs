@@ -5,11 +5,9 @@ import Meta
 import SearchFilter
 import Test.HUnit
 
-testItem = setTags
-               (setFileName
-                   (BucketItem "/path/to/item" createMeta)
-               "foo.png")
-           ["football", "fun"]
+testItem = setTags ["football", "fun"]
+         $ setFileName "foo.png"
+         $ BucketItem "/path/to/item" createMeta
 
 tests = test
     [ "matches" ~: do

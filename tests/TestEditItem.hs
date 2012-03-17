@@ -17,7 +17,7 @@ tests = test
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         bucket <- importFile bucket aSourceFile
         let item = head (bucketItems bucket)
-        let newItem = setTags item ["foo"]
+        let newItem = setTags ["foo"] item
         newBucket <- editItem bucket item newItem
         assertFileContains (bucketPath bucket </> "a-file-1" </> metaFileName) "tag::foo"
 
@@ -25,7 +25,7 @@ tests = test
         aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
         bucket <- importFile bucket aSourceFile
         let item = head (bucketItems bucket)
-        let newItem = setTags item ["foo"]
+        let newItem = setTags ["foo"] item
         newBucket <- editItem bucket item newItem
         assertEqual "" [newItem] (bucketItems newBucket)
     ]

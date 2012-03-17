@@ -16,7 +16,7 @@ handleEditButtonClicked tagEditor treeView model tagEditorText currentBucketRef 
     when (response == ResponseOk) $ do
         currentBucket <- readIORef currentBucketRef
         tagsText <- entryGetText tagEditorText
-        let newItem = setTags item (stringToTags tagsText)
+        let newItem = setTags (stringToTags tagsText) item
         -- TODO: show error dialog if we can't save item
         newBucket <- editItem currentBucket item newItem
         writeIORef currentBucketRef newBucket
