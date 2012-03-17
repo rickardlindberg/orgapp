@@ -87,6 +87,7 @@ handleItemActivated treeView model treePath treeViewColumn =
     getItem treeView model treePath >>= open
 
 handleEditButtonClicked tagEditor treeView model tagEditorText currentBucketRef updateItemList = do
+    -- TODO: extract tags -> comma sep string -> tags somehere else
     (treePath, _) <- treeViewGetCursor treeView
     item <- getItem treeView model treePath
     entrySetText tagEditorText (intercalate "," (tags item))

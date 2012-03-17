@@ -7,6 +7,7 @@ import System.FilePath
 
 editItem :: Bucket -> BucketItem -> BucketItem -> IO Bucket
 editItem bucket oldItem newItem =
+    -- TODO: fail if oldItem and newItem does not have same path?
     let newBucket = addItem bucket newItem
         newMeta = itemMeta newItem
         itemDir = itemPath newItem
