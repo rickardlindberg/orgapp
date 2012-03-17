@@ -5,6 +5,7 @@ import qualified TestImportFile as TestImportFile
 import qualified TestLoadBucket as TestLoadBucket
 import qualified TestMeta as TestMeta
 import qualified TestReadDirectoryInfo as TestReadDirectoryInfo
+import qualified TestSearch as TestSearch
 import System.Exit
 import Test.HUnit
 
@@ -16,6 +17,7 @@ allTests = test
     , TestLoadBucket.tests
     , TestMeta.tests
     , TestReadDirectoryInfo.tests
+    , TestSearch.tests
     ]
 
 main = runTestTT allTests >>= exit
