@@ -16,7 +16,7 @@ instance Arbitrary BucketItem where
 arbitratyPath :: Gen FilePath
 arbitratyPath = do
     dirs <- listOf1 arbitraryDirName
-    return $ "/" ++ (intercalate "/" dirs)
+    return $ '/' : intercalate "/" dirs
 
 arbitraryDirName :: Gen String
 arbitraryDirName = listOf1 $ elements ['a'..'z']

@@ -18,9 +18,9 @@ handleEditButtonClicked itemEditor treeView model tagsText titleText currentBuck
         currentBucket <- readIORef currentBucketRef
         tagsText <- entryGetText tagsText
         titleText <- entryGetText titleText
-        let newItem = setTags (stringToTags tagsText)
-                    $ setTitle titleText
-                    $ item
+        let newItem = setTags (stringToTags tagsText) $
+                      setTitle titleText
+                      item
         -- TODO: show error dialog if we can't save item
         newBucket <- editItem currentBucket item newItem
         writeIORef currentBucketRef newBucket
@@ -34,6 +34,6 @@ stringToTags :: String -> [String]
 stringToTags = getTags
     where
         getTags "" = []
-        getTags s = (takeWhile notComma s):getTags (drop 1 (dropWhile notComma s))
+        getTags s = takeWhile notComma s : getTags (drop 1 (dropWhile notComma s))
         notComma ',' = False
         notComma _ = True

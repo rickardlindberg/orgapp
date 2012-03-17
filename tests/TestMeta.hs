@@ -11,18 +11,18 @@ tests = test
             let meta = metaFromStr "filename::foo.png\n"
             getValue "filename" "" meta @?= "foo.png"
 
-        , "defaults to given value" ~: do
+        , "defaults to given value" ~:
             getValue "nonExisting" "DEF" createMeta @?= "DEF"
 
         , "multiple items" ~: do
             let meta = metaFromStr "tag::good\ntag::sports\n"
             getValues "tag" meta @?= ["good", "sports"]
 
-        , "defaults to empty list" ~: do
+        , "defaults to empty list" ~:
             getValues "nonExisting" createMeta @?= []
 
         , "getting single returns first" ~: do
-            let meta = setValues "tag" ["sports", "good"] $ createMeta
+            let meta = setValues "tag" ["sports", "good"] createMeta
             getValue "tag" "" meta @?= "sports"
         ]
 
@@ -33,11 +33,11 @@ tests = test
             metaToStr meta @?= "filename::foo.png\n"
 
         , "multiple items" ~: do
-            let meta = setValues "tag" ["good", "sports"] $ createMeta
+            let meta = setValues "tag" ["good", "sports"] createMeta
             metaToStr meta @?= "tag::good\ntag::sports\n"
 
         , "does not write empty lists" ~: do
-            let meta = setValues "tag" [] $ createMeta
+            let meta = setValues "tag" [] createMeta
             metaToStr meta @?= ""
         ]
 

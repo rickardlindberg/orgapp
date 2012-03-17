@@ -77,7 +77,7 @@ createTagsColumn model = do
     column       <- treeViewColumnNew
     treeViewColumnPackStart column textRenderer True
     cellLayoutSetAttributes column textRenderer model $
-        \item -> [cellText := "(" ++ (intercalate "," (tags item)) ++ ")", cellTextForeground := "#aaaaaa"]
+        \item -> [cellText := "(" ++ intercalate "," (tags item) ++ ")", cellTextForeground := "#aaaaaa"]
     return column
 
 createDateColumn :: ItemsTreeModel -> IO TreeViewColumn

@@ -48,9 +48,9 @@ setModificationTime path year month day = do
     zone <- getCurrentTimeZone
     let utcDate = localTimeToUTC zone localDate
     let posix = utcTimeToPOSIXSeconds utcDate
-    atime <- return 0
-    mtime <- return (fromIntegral (round posix))
+    let atime = 0
+    let mtime = fromIntegral (round posix)
     setFileTimes path atime mtime
 
 getMtime :: FilePath -> IO EpochTime
-getMtime path = getFileStatus path >>= return . modificationTime
+getMtime = fmap modificationTime . getFileStatus

@@ -27,18 +27,18 @@ mapDirectories fn rootDir = do
     innerDirs <- forM (filter (`notElem` [".", ".."]) contents) $ \path -> do
         let fullPath = rootDir </> path
         isDirectory <- doesDirectoryExist fullPath
-        case isDirectory of
-            True  -> mapDirectories fn fullPath
-            False -> return []
+        if isDirectory
+            then mapDirectories fn fullPath
+            else return []
     return $ thisDir:concat innerDirs
 
 dirToInfo :: FilePath -> IO DirectoryInfo
 dirToInfo dir = do
     contents <- getDirectoryContents dir
     files    <- filterM (\path -> isFile (dir </> path)) contents
-    meta     <- case metaFileName `elem` files of
-                    True  -> readFile (dir </> metaFileName) >>= return . Just
-                    False -> return Nothing
+    meta     <- if metaFileName `elem` files
+                    then fmap Just (readFile (dir </> metaFileName))
+                    else return Nothing
     return   $  DirectoryInfo dir files meta
 
 isFile :: FilePath -> IO Bool
