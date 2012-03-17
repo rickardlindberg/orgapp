@@ -22,6 +22,14 @@ data BucketItem = BucketItem {
     itemMeta :: Meta
 } deriving (Eq, Show)
 
+displayTitle :: BucketItem -> String
+displayTitle item = case title item of
+    ""    -> fileName item
+    title -> title
+
+title :: BucketItem -> String
+title = getValue "title" "" . itemMeta
+
 filePath :: BucketItem -> FilePath
 filePath item = itemPath item </> fileName item
 

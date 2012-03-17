@@ -67,7 +67,7 @@ createNameColumn model = do
     column       <- treeViewColumnNew
     treeViewColumnPackStart column textRenderer True
     cellLayoutSetAttributes column textRenderer model $
-        \item -> [cellText := fileName item]
+        \item -> [cellText := displayTitle item]
     return column
 
 createTagsColumn :: ItemsTreeModel -> IO TreeViewColumn
