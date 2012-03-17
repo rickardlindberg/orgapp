@@ -9,12 +9,11 @@ import System.Directory
 import System.FilePath
 
 importFile :: Bucket -> FilePath -> IO Bucket
-importFile bucket srcPath =
-    let newItem = bucketItemFromSrc bucket srcPath createMeta
-        newMeta = itemMeta newItem
-        itemDir = itemPath newItem
-    in prepareDirectory itemDir $ do
-        writeMeta newMeta (itemDir </> metaFileName)
+importFile bucket srcPath = do
+    newItem <- bucketItemFromSrc bucket srcPath
+    let itemDir = itemPath newItem
+    prepareDirectory itemDir $ do
+        writeMeta (itemMeta newItem) (itemDir </> metaFileName)
         copyFile srcPath (itemDir </> fileName newItem)
         return $ addItem bucket newItem
 
@@ -25,8 +24,9 @@ prepareDirectory path action =
         removeDirectoryRecursive
         (\_ -> action)
 
-bucketItemFromSrc :: Bucket -> FilePath -> Meta -> BucketItem
-bucketItemFromSrc bucket srcPath meta = setFileName (BucketItem itemDirectory meta) srcFileName
+bucketItemFromSrc :: Bucket -> FilePath -> IO BucketItem
+bucketItemFromSrc bucket srcPath =
+    return $ setFileName (BucketItem itemDirectory createMeta) srcFileName
     where
         itemDirectory = bucketPath bucket </> itemName
         itemName      = createItemName (bucketItems bucket) srcPath
