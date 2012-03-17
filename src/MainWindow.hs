@@ -1,5 +1,6 @@
 module MainWindow (showMainWindow) where
 
+import Bucket.EditItem
 import Bucket.Import
 import Bucket.Types
 import Control.Monad
@@ -33,7 +34,7 @@ showMainWindow currentBucketRef = do
     importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef updateItemList
     searchText    `onEditableChanged` updateItemList
     itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
-    editButton    `onClicked`         handleEditButtonClicked tagEditor itemsTreeView itemsModel tagEditorText
+    editButton    `onClicked`         handleEditButtonClicked tagEditor itemsTreeView itemsModel tagEditorText currentBucketRef updateItemList
 
     initItemsTreeView itemsTreeView itemsModel
     updateItemList
@@ -85,11 +86,22 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
 handleItemActivated treeView model treePath treeViewColumn =
     getItem treeView model treePath >>= open
 
-handleEditButtonClicked tagEditor treeView model tagEditorText = do
+handleEditButtonClicked tagEditor treeView model tagEditorText currentBucketRef updateItemList = do
     (treePath, _) <- treeViewGetCursor treeView
     item <- getItem treeView model treePath
-    entrySetText tagEditorText (intercalate ", " (tags item))
+    entrySetText tagEditorText (intercalate "," (tags item))
     response <- dialogRun tagEditor
     when (response == ResponseOk) $ do
-        putStrLn $ fileName item
+        currentBucket <- readIORef currentBucketRef
+        tagsText <- entryGetText tagEditorText
+        let newItem = setTags item (getTags tagsText)
+        -- TODO: show error dialog if we can't save item
+        newBucket <- editItem currentBucket item newItem
+        writeIORef currentBucketRef newBucket
+        updateItemList
     widgetHide tagEditor
+    where
+        getTags "" = []
+        getTags s = (takeWhile notComma s):getTags (drop 1 (dropWhile notComma s))
+        notComma ',' = False
+        notComma _ = True

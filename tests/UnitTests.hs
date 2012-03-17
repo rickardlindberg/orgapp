@@ -1,5 +1,6 @@
 import qualified TestBucket as TestBucket
 import qualified TestCreateBucket as TestCreateBucket
+import qualified TestEditItem as TestEditItem
 import qualified TestImportFile as TestImportFile
 import qualified TestLoadBucket as TestLoadBucket
 import qualified TestMeta as TestMeta
@@ -10,6 +11,7 @@ import Test.HUnit
 allTests = test
     [ TestBucket.tests
     , TestCreateBucket.tests
+    , TestEditItem.tests
     , TestImportFile.tests
     , TestLoadBucket.tests
     , TestMeta.tests

@@ -33,3 +33,6 @@ setFileName (BucketItem a meta) path = BucketItem a (setValue "filename" path me
 
 tags :: BucketItem -> [String]
 tags = getValues "tag" . itemMeta
+
+setTags :: BucketItem -> [String] -> BucketItem
+setTags (BucketItem a meta) tags = BucketItem a (setValues "tag" tags meta)
