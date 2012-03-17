@@ -4,7 +4,7 @@ import Bucket.Load
 import Bucket.Types
 import Data.IORef
 import Graphics.UI.Gtk
-import MainWindow
+import GUI.MainWindow
 import System.Directory
 import System.FilePath
 

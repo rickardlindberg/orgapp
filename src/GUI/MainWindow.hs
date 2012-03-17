@@ -1,4 +1,4 @@
-module MainWindow (showMainWindow) where
+module GUI.MainWindow (showMainWindow) where
 
 import Bucket.EditItem
 import Bucket.Import
@@ -7,7 +7,7 @@ import Control.Monad
 import Data.IORef
 import Data.List
 import Graphics.UI.Gtk
-import ItemsTreeModel
+import GUI.ItemsTreeModel
 import Meta
 import Open
 import SearchFilter

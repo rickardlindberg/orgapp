@@ -1,4 +1,4 @@
-module ItemsTreeModel
+module GUI.ItemsTreeModel
     ( ItemsTreeModel
     , itemsTreeModelNew
     , updateModel
