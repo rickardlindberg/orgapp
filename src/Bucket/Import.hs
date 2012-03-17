@@ -2,11 +2,17 @@ module Bucket.Import where
 
 import Bucket.Types
 import Control.Exception
+import Control.Monad
 import Data.List
+import Data.Time
+import Data.Time.Clock.POSIX
 import DirectoryInfo
 import Meta
 import System.Directory
 import System.FilePath
+import System.Locale (defaultTimeLocale)
+import System.Posix (getFileStatus, modificationTime)
+import Text.Printf
 
 importFile :: Bucket -> FilePath -> IO Bucket
 importFile bucket srcPath = do
@@ -25,12 +31,23 @@ prepareDirectory path action =
         (\_ -> action)
 
 bucketItemFromSrc :: Bucket -> FilePath -> IO BucketItem
-bucketItemFromSrc bucket srcPath =
-    return $ setFileName (BucketItem itemDirectory createMeta) srcFileName
+bucketItemFromSrc bucket srcPath = do
+    dateStr' <- dateStr srcPath
+    return $ setCreationDate (setFileName (BucketItem itemDirectory createMeta) srcFileName) dateStr'
     where
         itemDirectory = bucketPath bucket </> itemName
         itemName      = createItemName (bucketItems bucket) srcPath
         srcFileName   = takeFileName srcPath
+
+dateStr :: FilePath -> IO String
+dateStr path = do
+    fs <- getFileStatus path
+    zone <- getCurrentTimeZone
+    let mtime     = modificationTime fs
+    let posixTime = realToFrac mtime
+    let utc       = posixSecondsToUTCTime posixTime
+    let local     = utcToLocalTime zone utc
+    return $ formatTime defaultTimeLocale "%Y-%m-%d" local
 
 createItemName :: [BucketItem] -> FilePath -> String
 createItemName existingItems filePath = uniqueItemName

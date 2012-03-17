@@ -8,6 +8,7 @@ import Fixtures
 import Meta
 import Prelude hiding (catch)
 import System.FilePath
+import System.Time
 import Test.HUnit
 
 tests = test
@@ -21,6 +22,13 @@ tests = test
         importFile bucket aSourceFile
         let metaFile = (bucketPath bucket </> "a-file-1" </> "meta.txt")
         assertFileContains metaFile "name::a-file.png\n"
+
+    , "importing a file writes the current modification date to meta" ~: withBucket $ \((tmpDir, bucket)) -> do
+        aSourceFile <- createEmptyFile $ tmpDir </> "a-file.png"
+        setModificationTime aSourceFile 2012 2 15
+        importFile bucket aSourceFile
+        let metaFile = (bucketPath bucket </> "a-file-1" </> "meta.txt")
+        assertFileContains metaFile "creationdate::2012-02-15\n"
 
     , "importing files updates the bucket" ~: withBucket $ \((tmpDir, bucket)) -> do
         file1 <- createEmptyFile $ tmpDir </> "file1.png"

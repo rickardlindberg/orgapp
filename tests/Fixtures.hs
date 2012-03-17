@@ -3,10 +3,13 @@ module Fixtures where
 import Bucket.Load
 import Bucket.Types
 import Control.Exception.Base (bracket)
+import Data.Time
+import Data.Time.Clock.POSIX
 import Meta
 import System.Directory
 import System.FilePath
 import System.IO
+import System.Posix (setFileTimes)
 
 withTemporaryDirectory :: (FilePath -> IO a) -> IO a
 withTemporaryDirectory = bracket setUp tearDown
@@ -38,3 +41,13 @@ createItemAt path name = do
 
 anItemWithName :: String -> BucketItem
 anItemWithName name = BucketItem ("/tmp/" ++ name) createMeta
+
+setModificationTime :: FilePath -> Integer -> Int -> Int -> IO ()
+setModificationTime path year month day = do
+    let localDate = LocalTime (fromGregorian year month day) midnight
+    zone <- getCurrentTimeZone
+    let utcDate = localTimeToUTC zone localDate
+    let posix = utcTimeToPOSIXSeconds utcDate
+    atime <- return 0
+    mtime <- return (fromIntegral (round posix))
+    setFileTimes path atime mtime
