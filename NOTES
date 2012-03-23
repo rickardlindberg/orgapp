@@ -25,6 +25,7 @@
         - .file could result in "" item name
             - "" item name should be prevented
         - file contains chars illegal in dir names (which?)
+        - schrödingers cat encoding problem
 
 - Error cases to handle
     - Opening item which has disappeared from disk
