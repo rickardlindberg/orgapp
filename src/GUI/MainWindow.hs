@@ -104,4 +104,4 @@ handleImportButtonClicked fileChooser currentBucketRef updateItemList = do
     widgetHide fileChooser
 
 handleItemActivated treeView model treePath treeViewColumn =
-    getItem treeView model treePath >>= open
+    getItem treeView model treePath >>= \(Just item) -> open item

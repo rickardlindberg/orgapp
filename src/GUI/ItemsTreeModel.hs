@@ -6,6 +6,7 @@ module GUI.ItemsTreeModel
     ) where
 
 import Bucket.Types
+import Data.Maybe
 import Graphics.UI.Gtk
 
 type ItemsTreeModel = ListStore BucketItem
@@ -19,7 +20,9 @@ updateModel model items = do
     mapM_ (listStoreAppend model) items
     return ()
 
-getItem :: TreeView -> ItemsTreeModel -> TreePath -> IO BucketItem
+getItem :: TreeView -> ItemsTreeModel -> TreePath -> IO (Maybe BucketItem)
 getItem treeView model treePath = do
-    Just treeIter <- treeModelGetIter model treePath
-    listStoreGetValue model (listStoreIterToIndex treeIter)
+    treeIter <- treeModelGetIter model treePath
+    if isJust treeIter
+        then fmap Just (listStoreGetValue model (listStoreIterToIndex (fromJust treeIter)))
+        else return Nothing
