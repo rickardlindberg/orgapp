@@ -1,5 +1,6 @@
 module GUI.MainWindow (showMainWindow) where
 
+import Control.Monad.Trans (liftIO)
 import Bucket.Import
 import Bucket.Types
 import Control.Monad
@@ -31,6 +32,10 @@ showMainWindow currentBucketRef = do
     let updateItemList = createUpdateItemList itemsModel currentBucketRef searchText
 
     mainWindow    `onDestroy`         mainQuit
+    mainWindow    `on`                keyPressEvent $ tryEvent $ do
+                                          [Control] <- eventModifier
+                                          "l"       <- eventKeyName
+                                          liftIO $ widgetGrabFocus searchText
     importButton  `onClicked`         handleImportButtonClicked fileChooser currentBucketRef updateItemList
     searchText    `onEditableChanged` updateItemList
     itemsTreeView `onRowActivated`    handleItemActivated itemsTreeView itemsModel
