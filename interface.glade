@@ -69,6 +69,7 @@
             <property name="receives_default">True</property>
           </object>
           <packing>
+            <property name="expand">False</property>
             <property name="position">2</property>
           </packing>
         </child>
