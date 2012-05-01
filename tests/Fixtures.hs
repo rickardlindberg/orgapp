@@ -3,6 +3,8 @@ module Fixtures where
 import Bucket.Load
 import Bucket.Types
 import Control.Exception.Base (bracket)
+import Control.Monad
+import Data.List
 import Data.Time
 import Data.Time.Clock.POSIX
 import Meta
@@ -10,6 +12,7 @@ import System.Directory
 import System.FilePath
 import System.IO
 import System.Posix (getFileStatus, modificationTime, EpochTime, setFileTimes)
+import Test.QuickCheck
 
 withTemporaryDirectory :: (FilePath -> IO a) -> IO a
 withTemporaryDirectory = bracket setUp tearDown
@@ -54,3 +57,39 @@ setModificationTime path year month day = do
 
 getMtime :: FilePath -> IO EpochTime
 getMtime = fmap modificationTime . getFileStatus
+
+instance Arbitrary Bucket where
+    arbitrary = liftM2 bucketFromList arbitratyPath arbitrary
+
+instance Arbitrary BucketItem where
+    arbitrary = liftM2 BucketItem arbitratyPath arbitrary
+
+instance Arbitrary Meta where
+    arbitrary = do
+        f <- arbitraryMetaValue
+        return (setValue "filename" f createMeta)
+
+arbitratyPath :: Gen FilePath
+arbitratyPath = do
+    dirs <- listOf1 arbitraryDirName
+    return $ '/' : intercalate "/" dirs
+
+arbitraryDirName :: Gen String
+arbitraryDirName = listOf1 $ elements ['a'..'z']
+
+ourListOfStrings :: Gen [BucketItem]
+ourListOfStrings =
+    oneof
+        [ vectorOf 1 itemNameGenerator
+        , vectorOf 2 itemNameGenerator
+        , vectorOf 3 itemNameGenerator
+        ]
+    where
+        itemNameGenerator = elements
+            [ BucketItem "foo" createMeta
+            , BucketItem "foo-1" createMeta
+            , BucketItem "foo-2" createMeta
+            ]
+
+arbitraryMetaValue :: Gen String
+arbitraryMetaValue = oneof [ return "foo", return "bar" ]
