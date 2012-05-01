@@ -4,10 +4,13 @@ import DirectoryInfo
 import Fixtures
 import System.Directory
 import System.FilePath
+import Test.Hspec.HUnit()
+import Test.Hspec.Monadic
 import Test.HUnit
 
-tests = test
-    [ "can read directory info from file system" ~: withTemporaryDirectory $ \tmpDir -> do
+tests = describe "read directory info" $ do
+
+    it "can read directory info from file system" $ withTemporaryDirectory $ \tmpDir -> do
         createEmptyFile $ tmpDir </> "a-file.png"
         createDirectory $ tmpDir </> "b-dir"
         createEmptyFile $ tmpDir </> "b-dir" </> "b-file.png"
@@ -18,9 +21,8 @@ tests = test
                  , DirectoryInfo (tmpDir </> "b-dir" </> "c-dir") []             Nothing
                  ]
 
-    , "pupulates meta" ~: withTemporaryDirectory $ \tmpDir -> do
+    it "pupulates meta" $ withTemporaryDirectory $ \tmpDir -> do
         writeFile (tmpDir </> "meta.txt") "meta content"
         info <- getDirectoryInfoRecursive tmpDir
         info @?= [ DirectoryInfo tmpDir ["meta.txt"] (Just "meta content")
                  ]
-    ]
