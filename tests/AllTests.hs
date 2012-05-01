@@ -1,7 +1,6 @@
 import Bucket.Import
 import Bucket.Types
 import Fixtures
-import Meta
 import qualified Data.Map as M
 import qualified TestBucket as TestBucket
 import qualified TestCreateBucket as TestCreateBucket
@@ -25,7 +24,7 @@ main = hspecX $ do
         it "TestEditItem" TestEditItem.tests
         it "TestImportFile" TestImportFile.tests
         it "TestLoadBucket" TestLoadBucket.tests
-        it "TestMeta" TestMeta.tests
+        TestMeta.tests
         it "TestReadDirectoryInfo" TestReadDirectoryInfo.tests
         it "TestSearch" TestSearch.tests
 
@@ -42,6 +41,3 @@ main = hspecX $ do
                 newSize   = length $ bucketItems newBucket
                 oldSize   = length $ bucketItems bucket
             in M.notMember (itemPath item) (bucketItemsMap bucket) ==> newSize == oldSize + 1
-
-        prop "roundtrip meta" $ \meta ->
-            metaFromStr (metaToStr meta) == meta
