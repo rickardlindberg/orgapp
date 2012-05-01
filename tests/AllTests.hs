@@ -1,7 +1,6 @@
 import Bucket.Import
 import Bucket.Types
 import Fixtures
-import qualified Data.Map as M
 import qualified TestBucket as TestBucket
 import qualified TestCreateBucket as TestCreateBucket
 import qualified TestEditItem as TestEditItem
@@ -19,7 +18,7 @@ main = hspecX $ do
 
     describe "unit tests" $ do
 
-        it "TestBucket" TestBucket.tests
+        TestBucket.tests
         it "TestCreateBucket" TestCreateBucket.tests
         it "TestEditItem" TestEditItem.tests
         it "TestImportFile" TestImportFile.tests
@@ -28,16 +27,10 @@ main = hspecX $ do
         it "TestReadDirectoryInfo" TestReadDirectoryInfo.tests
         it "TestSearch" TestSearch.tests
 
-    describe "quick check tests" $ do
+    describe "quick check tests" $
 
         prop "name is unique" $
             forAll ourListOfStrings $ \itemNames ->
                 let newItemName = createItemName itemNames ("/tmp/" ++ aItem ++ ".png")
                     aItem = itemPath $ head itemNames
                 in newItemName `notElem` map itemPath itemNames
-
-        prop "adding item makes bucket bigger" $ \(bucket, item) ->
-            let newBucket = addItem bucket item
-                newSize   = length $ bucketItems newBucket
-                oldSize   = length $ bucketItems bucket
-            in M.notMember (itemPath item) (bucketItemsMap bucket) ==> newSize == oldSize + 1
