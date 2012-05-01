@@ -3,25 +3,35 @@ module TestSearch (tests) where
 import Bucket.Types
 import Meta
 import SearchFilter
-import Test.Hspec.HUnit()
 import Test.Hspec.Monadic
-import Test.HUnit
-
-testItem = setTags ["football", "fun"]
-         $ setFileName "foo.png"
-         $ BucketItem "/path/to/item" createMeta
 
 tests = describe "search" $ do
 
-    it "matches" $ do
-        "foo"      `assertMatch`   "because partial item name"
-        "Foo"      `assertMatch`   "because partial item name with wrong case"
-        "foot"     `assertMatch`   "because partial tag"
+    let testItem = setTags ["football", "fun"]
+                 $ setFileName "foo.png"
+                 $ BucketItem "/path/to/item" createMeta
 
-    it "does not match" $ do
-        "item"     `assertNoMatch` "because item path is not searched"
-        "FootBall" `assertNoMatch` "because tag with wrong case"
+    describe "matches" $ do
 
-assertMatch search message = assertBool message (matchSearch search testItem)
+        it "partial item name" $
+            matchSearch "foo" testItem
 
-assertNoMatch search message = assertBool message (not (matchSearch search testItem))
+        it "partial item name with wrong case" $
+            matchSearch "Foo" testItem
+
+        it "partial tag" $
+            matchSearch "foot" testItem
+
+        it "when all words match" $
+            matchSearch "foo fun" testItem
+
+    describe "doesn't match" $ do
+
+        it "item path" $
+            not $ matchSearch "item" testItem
+
+        it "tag with wrong case" $
+            not $ matchSearch "FootBall" testItem
+
+        it "when all words don't match" $
+            not $ matchSearch "foo XYZ" testItem

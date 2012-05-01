@@ -1,15 +1,16 @@
 module SearchFilter (matchSearch) where
 
 import Bucket.Types
-import Data.Text hiding (any)
-
-type Predicate = String -> BucketItem -> Bool
+import Data.Text (pack, toLower, isInfixOf)
 
 type Matcher = BucketItem -> Bool
 
-matchSearch :: Predicate
-matchSearch searchString =
-    matchFileName searchString `matchOr` matchTag searchString
+matchSearch :: String -> Matcher
+matchSearch = foldl matchAnd (const True) . map matchItem . words
+
+matchItem :: String -> Matcher
+matchItem itemString =
+    matchFileName itemString `matchOr` matchTag itemString
 
 matchFileName :: String -> Matcher
 matchFileName searchString item =
@@ -22,3 +23,6 @@ matchTag searchString item = any matchTag (tags item)
 
 matchOr :: Matcher -> Matcher -> Matcher
 matchOr left right item = or [left item, right item]
+
+matchAnd :: Matcher -> Matcher -> Matcher
+matchAnd left right item = and [left item, right item]
