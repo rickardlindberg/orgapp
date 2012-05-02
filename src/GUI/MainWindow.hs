@@ -11,12 +11,13 @@ import Graphics.UI.Gtk
 import GUI.ItemEditor
 import GUI.ItemsTreeModel
 import Open
+import Paths_orgapp
 import SearchFilter
 import System.Directory
 
 showMainWindow :: IORef Bucket -> IO ()
 showMainWindow currentBucketRef = do
-    builder       <- builderFromFile "interface.glade"
+    builder       <- getDataFileName "interface.glade" >>= builderFromFile
 
     mainWindow    <- builderGetObject builder castToWindow            "main_window"
     importButton  <- builderGetObject builder castToButton            "import_button"

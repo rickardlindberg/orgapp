@@ -9,6 +9,7 @@ Maintainer:     ricli85@gmail.com
 Category:       Utility
 Build-type:     Simple
 Cabal-version:  >=1.8
+Data-Files:     interface.glade
 
 Flag dev
   Description: Enable warnings
