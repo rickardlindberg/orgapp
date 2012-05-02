@@ -10,11 +10,11 @@ matchSearch = foldl matchAnd (const True) . map matchItem . words
 
 matchItem :: String -> Matcher
 matchItem itemString =
-    matchFileName itemString `matchOr` matchTag itemString
+    matchDisplayTitle itemString `matchOr` matchTag itemString
 
-matchFileName :: String -> Matcher
-matchFileName searchString item =
-    toLower (pack searchString) `isInfixOf` toLower (pack (fileName item))
+matchDisplayTitle :: String -> Matcher
+matchDisplayTitle searchString item =
+    toLower (pack searchString) `isInfixOf` toLower (pack (displayTitle item))
 
 matchTag :: String -> Matcher
 matchTag searchString item = any matchTag (tags item)
