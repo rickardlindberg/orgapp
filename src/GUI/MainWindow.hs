@@ -1,11 +1,12 @@
 module GUI.MainWindow (showMainWindow) where
 
-import Control.Monad.Trans (liftIO)
 import Bucket.Import
 import Bucket.Types
 import Control.Monad
+import Control.Monad.Trans (liftIO)
 import Data.IORef
 import Data.List
+import GHC.Exts
 import Graphics.UI.Gtk
 import GUI.ItemEditor
 import GUI.ItemsTreeModel
@@ -50,7 +51,7 @@ createUpdateItemList :: ItemsTreeModel -> IORef Bucket -> Entry -> IO ()
 createUpdateItemList model bucketRef searchText = do
     bucket <- readIORef bucketRef
     searchString <- editableGetChars searchText 0 (-1)
-    let filteredItems = filter (matchSearch searchString) (bucketItems bucket)
+    let filteredItems = sortWith displayTitle $ filter (matchSearch searchString) (bucketItems bucket)
     updateModel model filteredItems
 
 builderFromFile :: FilePath -> IO Builder
