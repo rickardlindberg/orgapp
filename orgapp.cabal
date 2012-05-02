@@ -1,0 +1,60 @@
+Name:           orgapp
+Version:        0.1
+Synopsis:       An application to organize files.
+Homepage:       http://github.com/rickardlindberg/org-app
+License:        BSD3
+License-file:   LICENSE
+Author:         Rickard Lindberg
+Maintainer:     ricli85@gmail.com
+Category:       Utility
+Build-type:     Simple
+Cabal-version:  >=1.8
+
+Flag dev
+  Description: Enable warnings
+  Default:     False
+
+source-repository head
+  type:     git
+  location: http://github.com/rickardlindberg/org-app
+
+Executable orgapp
+  main-is:            Main.hs
+  hs-source-dirs:     src
+  if flag(dev)
+    ghc-options:      -fwarn-unused-imports -Werror
+  build-depends:      base >= 4 && <= 5
+               ,      directory
+               ,      text
+               ,      filepath
+               ,      containers
+               ,      parsec
+               ,      process
+               ,      gtk
+               ,      mtl
+               ,      unix
+               ,      old-locale
+               ,      time
+
+Test-Suite test-orgapp
+  type:               exitcode-stdio-1.0
+  main-is:            AllTests.hs
+  hs-source-dirs:     tests src
+  if flag(dev)
+    ghc-options:      -fwarn-unused-imports -Werror
+  build-depends:      base >= 4 && <= 5
+               ,      directory
+               ,      text
+               ,      filepath
+               ,      containers
+               ,      parsec
+               ,      process
+               ,      gtk
+               ,      mtl
+               ,      unix
+               ,      old-locale
+               ,      time
+
+               ,      hspec
+               ,      HUnit
+               ,      QuickCheck
