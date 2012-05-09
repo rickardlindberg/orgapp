@@ -1,7 +1,7 @@
 Name:           orgapp
 Version:        0.1
 Synopsis:       An application to organize files.
-Homepage:       http://github.com/rickardlindberg/org-app
+Homepage:       http://github.com/rickardlindberg/orgapp
 License:        BSD3
 License-file:   LICENSE
 Author:         Rickard Lindberg
@@ -17,7 +17,7 @@ Flag dev
 
 source-repository head
   type:     git
-  location: http://github.com/rickardlindberg/org-app
+  location: https://rickardlindberg@github.com/rickardlindberg/orgapp.git
 
 Executable orgapp
   main-is:            Main.hs

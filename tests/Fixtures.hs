@@ -17,14 +17,14 @@ import Test.QuickCheck
 withTemporaryDirectory :: (FilePath -> IO a) -> IO a
 withTemporaryDirectory = bracket setUp tearDown
     where
-        tmpDir   = "/tmp/org-app"
+        tmpDir   = "/tmp/orgapp"
         setUp    = createDirectory tmpDir >> return tmpDir
         tearDown = removeDirectoryRecursive
 
 withBucket :: ((FilePath, Bucket) -> IO a) -> IO a
 withBucket = bracket setUp tearDown
     where
-        tmpDir     = "/tmp/org-app"
+        tmpDir     = "/tmp/orgapp"
         bucketPath = tmpDir </> "a-bucket"
         setUp      = do
             createDirectory tmpDir
